@@ -1,0 +1,10 @@
+{
+  "name": "yujak-reservation-free",
+  "version": "3.0.0",
+  "private": true,
+  "description": "유작 공연 배우별 예매 현황 - Excel bundled deployment",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": { "express": "^4.21.2", "xlsx": "^0.18.5" }
+}
