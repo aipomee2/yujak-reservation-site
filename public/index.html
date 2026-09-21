@@ -1,10 +1,19 @@
 <!doctype html>
 <html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<meta name="theme-color" content="#f3f0eb">
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f1eb"
+>
 
 <title>유작 · 예매 현황</title>
 
@@ -13,15 +22,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700;800&display=swap');
 
 :root{
-  --bg:#f3f0eb;
-  --paper:#fffdf9;
-  --ink:#27231f;
-  --muted:#817b73;
-  --line:#e5e0d8;
-  --soft:#f7f4ef;
-  --soft2:#eeeae3;
-  --accent:#292724;
-  --shadow:0 18px 55px rgba(37,31,25,.08);
+
+  --bg:#f4f0e9;
+  --paper:#fffdfa;
+  --paper2:#faf7f2;
+
+  --ink:#29241f;
+  --muted:#827a71;
+  --light:#a69d93;
+
+  --line:#e6dfd5;
+
+  --dark:#2b2723;
+
+  --shadow:
+    0 16px 45px rgba(48,39,30,.07);
+
 }
 
 *{
@@ -33,9 +49,19 @@ html{
 }
 
 body{
+
   margin:0;
+
   color:var(--ink);
-  background:var(--bg);
+
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(255,255,255,.8),
+      transparent 35%
+    ),
+    var(--bg);
+
   font-family:
     Pretendard,
     -apple-system,
@@ -44,68 +70,217 @@ body{
     sans-serif;
 
   -webkit-font-smoothing:antialiased;
+
 }
 
 button,
 input{
-  font-family:inherit;
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
 }
 
 .wrap{
-  width:min(920px,calc(100% - 24px));
+
+  width:
+    min(1180px, calc(100% - 30px));
+
   margin:auto;
-  padding:18px 0 60px;
+
+  padding:
+    18px
+    0
+    70px;
+
 }
 
 /* =========================
-   TOP
+   Header
 ========================= */
 
-.topbar{
+.header{
+
   display:flex;
-  justify-content:space-between;
+
   align-items:center;
 
-  padding:0 3px 14px;
+  justify-content:space-between;
 
-  color:#77716a;
-  font-size:10px;
+  padding:
+    4px
+    4px
+    15px;
+
 }
 
-.brand{
+.logo{
+
   font:
-    600 22px/1
+    600 25px/1
     "Noto Serif KR",
     serif;
 
-  letter-spacing:-.13em;
+  letter-spacing:-.12em;
+
 }
 
-.date{
-  letter-spacing:.08em;
+.headerRight{
+
+  color:var(--muted);
+
+  font-size:9px;
+
+  letter-spacing:.13em;
+
 }
 
 /* =========================
-   POSTER
+   HERO
 ========================= */
 
-.poster{
+.hero{
+
+  position:relative;
+
   overflow:hidden;
 
-  border-radius:26px;
+  display:grid;
 
-  background:#eeeae4;
+  grid-template-columns:
+    42% 58%;
+
+  min-height:430px;
+
+  border-radius:28px;
+
+  background:#ddd5ca;
 
   box-shadow:var(--shadow);
 
-  margin-bottom:16px;
 }
 
-.poster img{
+/* 포스터 */
+
+.heroPoster{
+
+  position:relative;
+
+  min-height:430px;
+
+  overflow:hidden;
+
+  background:#eee8df;
+
+}
+
+.heroPoster img{
+
   display:block;
 
   width:100%;
-  height:auto;
+
+  height:100%;
+
+  object-fit:cover;
+
+}
+
+/* 단체사진 */
+
+.heroPhoto{
+
+  position:relative;
+
+  min-height:430px;
+
+  overflow:hidden;
+
+  background:#292722;
+
+}
+
+.heroPhoto img{
+
+  display:block;
+
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+}
+
+/* 가운데 자연스러운 연결 */
+
+.heroPhoto::before{
+
+  content:"";
+
+  position:absolute;
+
+  z-index:2;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:90px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #eee8df 0%,
+      rgba(238,232,223,.75) 25%,
+      rgba(238,232,223,0) 100%
+    );
+
+  pointer-events:none;
+
+}
+
+/* hero 하단 캡션 */
+
+.heroCaption{
+
+  position:absolute;
+
+  z-index:4;
+
+  left:25px;
+
+  bottom:22px;
+
+  color:white;
+
+  font-size:9px;
+
+  letter-spacing:.15em;
+
+  text-shadow:
+    0 1px 8px rgba(0,0,0,.5);
+
+}
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.mainGrid{
+
+  display:grid;
+
+  grid-template-columns:
+    1.45fr
+    1.25fr
+    .62fr;
+
+  gap:12px;
+
+  margin-top:13px;
+
 }
 
 /* =========================
@@ -113,210 +288,570 @@ input{
 ========================= */
 
 .card{
-  background:rgba(255,253,249,.97);
 
-  border:1px solid rgba(50,45,40,.07);
+  background:
+    rgba(255,253,250,.96);
 
-  border-radius:24px;
+  border:
+    1px solid
+    rgba(62,51,40,.07);
+
+  border-radius:22px;
 
   box-shadow:var(--shadow);
+
 }
 
 /* =========================
    SEARCH
 ========================= */
 
-.search{
-  padding:24px;
+.searchCard{
+
+  padding:23px;
+
 }
 
 .eyebrow{
-  font-size:9px;
+
+  color:#a0988e;
+
+  font-size:8px;
+
   font-weight:800;
 
   letter-spacing:.2em;
 
-  color:#9a938b;
 }
 
-.title{
+.searchTitle{
+
+  margin:
+    7px
+    0
+    4px;
+
   font:
-    600 24px/1.35
+    600 21px/1.35
     "Noto Serif KR",
     serif;
 
-  letter-spacing:-.07em;
+  letter-spacing:-.08em;
 
-  margin:7px 0 6px;
 }
 
-.desc{
-  font-size:11px;
+.searchDesc{
 
   color:var(--muted);
 
+  font-size:10px;
+
   line-height:1.7;
 
-  margin-bottom:15px;
+  margin-bottom:14px;
+
 }
 
-.row{
+/* 검색 종류 */
+
+.searchTabs{
+
   display:flex;
-  gap:8px;
+
+  gap:6px;
+
+  margin-bottom:9px;
+
 }
 
-.input{
-  height:52px;
+.searchTab{
 
-  flex:1;
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    #faf7f2;
+
+  color:#938b82;
+
+  border-radius:999px;
+
+  padding:
+    7px
+    11px;
+
+  font-size:9px;
+
+  font-weight:800;
+
+}
+
+.searchTab.active{
+
+  background:var(--dark);
+
+  color:white;
+
+  border-color:var(--dark);
+
+}
+
+.searchRow{
+
+  display:flex;
+
+  gap:7px;
+
+}
+
+.searchInput{
+
   min-width:0;
 
-  border:1px solid #ddd7cf;
+  flex:1;
 
-  border-radius:15px;
+  height:49px;
 
-  padding:0 16px;
+  border:
+    1px solid
+    #ded7ce;
 
-  background:#fbf9f5;
+  background:#fcfaf7;
 
-  outline:0;
+  border-radius:14px;
 
-  font-size:14px;
+  padding:
+    0
+    14px;
 
-  transition:.2s;
+  outline:none;
+
+  font-size:12px;
+
 }
 
-.input:focus{
-  background:#fff;
+.searchInput:focus{
 
-  border-color:#9b9389;
+  border-color:#aaa096;
+
+  background:white;
 
   box-shadow:
-    0 0 0 4px #f0ece6;
+    0 0 0 4px
+    rgba(180,168,154,.13);
+
 }
 
-.btn{
-  height:52px;
+.searchButton{
+
+  height:49px;
+
+  padding:
+    0
+    19px;
 
   border:0;
 
-  border-radius:15px;
+  border-radius:14px;
 
-  background:var(--accent);
+  background:var(--dark);
 
-  color:#fff;
-
-  font-size:12px;
-  font-weight:800;
-
-  padding:0 23px;
-
-  cursor:pointer;
-
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-
-  opacity:.92;
-}
-
-.btn:disabled{
-  opacity:.5;
-
-  cursor:wait;
-
-  transform:none;
-}
-
-.meta{
-  margin-top:8px;
-
-  color:#aaa39b;
-
-  font-size:9px;
-}
-
-.error{
-  min-height:16px;
-
-  color:#a33a32;
+  color:white;
 
   font-size:10px;
 
-  margin-top:6px;
+  font-weight:800;
+
 }
 
-.privacy{
-  text-align:center;
+.searchButton:disabled{
 
-  color:#9a938b;
+  opacity:.5;
 
-  font-size:9px;
+}
 
-  line-height:1.7;
+/* 추천 검색 */
 
-  margin:11px 5px;
+.quick{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  flex-wrap:wrap;
+
+  margin-top:11px;
+
+}
+
+.quickLabel{
+
+  color:#999188;
+
+  font-size:8px;
+
+  margin-right:2px;
+
+}
+
+.quickBtn{
+
+  border:0;
+
+  background:#f3eee7;
+
+  color:#71695f;
+
+  padding:
+    6px
+    9px;
+
+  border-radius:999px;
+
+  font-size:8px;
+
 }
 
 /* =========================
    STATS
 ========================= */
 
-.stats{
+.statsCard{
+
+  padding:20px;
+
+}
+
+.cardHeading{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:12px;
+
+}
+
+.cardTitle{
+
+  font:
+    600 18px
+    "Noto Serif KR",
+    serif;
+
+  letter-spacing:-.07em;
+
+}
+
+.cardSub{
+
+  color:#a19a91;
+
+  font-size:8px;
+
+}
+
+.statsGrid{
+
   display:grid;
 
   grid-template-columns:
-    1fr 1fr 1.4fr;
+    repeat(3,1fr);
 
-  gap:10px;
+  gap:8px;
 
-  margin-top:14px;
 }
 
-.stat{
-  padding:18px;
+.statBox{
+
+  min-height:100px;
+
+  padding:14px;
+
+  border:
+    1px solid
+    #e8e1d8;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdfa,
+      #faf6f0
+    );
+
 }
 
-.label{
-  font-size:9px;
+.statLabel{
 
-  color:#8b847c;
+  color:#938a81;
 
-  margin-bottom:6px;
+  font-size:8px;
+
+  margin-bottom:9px;
+
 }
 
-.value{
+.statValue{
+
   font:
-    600 23px
+    500 28px
     "Noto Serif KR",
     serif;
+
+  letter-spacing:-.08em;
+
 }
 
-.value small{
+.statValue small{
+
   font:
-    11px
+    10px
     Pretendard,
     sans-serif;
 
-  color:#77716a;
+  color:#777067;
+
 }
 
-.update{
-  font-size:10px;
+.statDate{
 
-  color:#77716a;
+  font-size:9px;
 
-  line-height:1.6;
+  line-height:1.5;
+
+  color:#777067;
+
 }
 
-.update strong{
-  display:block;
+/* =========================
+   SIDE ACTIONS
+========================= */
+
+.actionsCard{
+
+  padding:11px;
+
+}
+
+.action{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  width:100%;
+
+  min-height:60px;
+
+  padding:
+    0
+    13px;
+
+  border:
+    1px solid
+    #e2dbd2;
+
+  border-radius:15px;
+
+  background:#fcfaf7;
 
   color:var(--ink);
 
-  font-size:11px;
+  text-align:left;
+
+  margin-bottom:7px;
+
+}
+
+.action:last-child{
+  margin-bottom:0;
+}
+
+.action:hover{
+  background:white;
+}
+
+.actionIcon{
+
+  width:27px;
+
+  height:27px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:#f0ebe4;
+
+  margin-right:9px;
+
+}
+
+.actionLeft{
+
+  display:flex;
+
+  align-items:center;
+
+  min-width:0;
+
+}
+
+.actionText strong{
+
+  display:block;
+
+  font-size:10px;
+
+  margin-bottom:2px;
+
+}
+
+.actionText span{
+
+  display:block;
+
+  color:#999188;
+
+  font-size:7px;
+
+}
+
+.arrow{
+
+  color:#938b82;
+
+  font-size:14px;
+
+}
+
+.actionNote{
+
+  padding:
+    9px
+    6px
+    3px;
+
+  color:#9c948b;
+
+  font-size:8px;
+
+  line-height:1.6;
+
+}
+
+/* =========================
+   COMPARE
+========================= */
+
+.compareBox{
+
+  display:none;
+
+  margin-top:10px;
+
+  padding:18px;
+
+}
+
+.compareGrid{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:8px;
+
+}
+
+.compareSide{
+
+  border:
+    1px solid
+    var(--line);
+
+  background:#faf7f2;
+
+  border-radius:15px;
+
+  padding:14px;
+
+}
+
+.compareSide b{
+
+  display:block;
+
+  color:#938b82;
+
+  font-size:8px;
+
+  margin-bottom:5px;
+
+}
+
+.compareNum{
+
+  font:
+    500 25px
+    "Noto Serif KR",
+    serif;
+
+}
+
+.compareNames{
+
+  margin-top:7px;
+
+  color:#777067;
+
+  font-size:9px;
+
+  line-height:1.7;
+
+}
+
+.compareBoth{
+
+  margin-top:9px;
+
+  padding-top:9px;
+
+  border-top:1px solid var(--line);
+
+  color:#777067;
+
+  font-size:8px;
+
+  line-height:1.7;
+
+}
+
+.compareNote{
+
+  margin-top:8px;
+
+  color:#aaa198;
+
+  font-size:7px;
+
+  line-height:1.6;
+
 }
 
 /* =========================
@@ -324,312 +859,318 @@ input{
 ========================= */
 
 .episodeSection{
-  margin-top:14px;
 
-  padding:22px;
+  margin-top:13px;
 
-  background:rgba(255,253,249,.97);
+  padding:21px;
 
-  border:
-    1px solid
-    rgba(50,45,40,.07);
-
-  border-radius:24px;
-
-  box-shadow:var(--shadow);
 }
 
 .episodeHeader{
-  display:flex;
 
-  justify-content:space-between;
-
-  align-items:flex-end;
-
-  margin-bottom:16px;
-}
-
-.episodeTitle{
-  font:
-    600 20px
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.06em;
-
-  margin:7px 0 0;
-}
-
-.episodeTotal{
-  font-size:10px;
-
-  color:#8b847c;
-}
-
-.episodes{
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:10px;
-}
-
-.episodeCard{
-  position:relative;
-
-  overflow:hidden;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:18px;
-
-  padding:17px;
-
-  background:#fff;
-
-  transition:
-    transform .2s,
-    box-shadow .2s;
-}
-
-.episodeCard:hover{
-  transform:translateY(-2px);
-
-  box-shadow:
-    0 10px 30px
-    rgba(37,31,25,.07);
-}
-
-.episodeNumber{
-  font-size:9px;
-
-  font-weight:800;
-
-  letter-spacing:.14em;
-
-  color:#9a938b;
-
-  margin-bottom:7px;
-}
-
-.episodeDate{
-  font:
-    600 15px
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.04em;
-
-  margin-bottom:12px;
-}
-
-.episodePeople{
-  font:
-    600 25px
-    "Noto Serif KR",
-    serif;
-}
-
-.episodePeople small{
-  font:
-    11px
-    Pretendard,
-    sans-serif;
-
-  color:#77716a;
-}
-
-.episodeBookings{
-  margin-top:4px;
-
-  font-size:9px;
-
-  color:#99928a;
-}
-
-.episodeRatio{
-  margin-top:12px;
-
-  height:4px;
-
-  overflow:hidden;
-
-  border-radius:99px;
-
-  background:#eeeae4;
-}
-
-.episodeRatio span{
-  display:block;
-
-  height:100%;
-
-  width:0%;
-
-  border-radius:99px;
-
-  background:#292724;
-}
-
-.episodeEmpty{
-  opacity:.55;
-}
-
-.episodeEmpty .episodePeople{
-  color:#aaa39b;
-}
-
-/* =========================
-   REFRESH
-========================= */
-
-.refreshRow{
-  display:flex;
-
-  justify-content:flex-end;
-
-  margin-top:10px;
-}
-
-.refreshBtn{
-  border:0;
-
-  background:transparent;
-
-  color:#8b847c;
-
-  font-size:9px;
-
-  cursor:pointer;
-
-  padding:5px 2px;
-}
-
-.refreshBtn:hover{
-  color:var(--ink);
-}
-
-/* =========================
-   SEARCH RESULT
-========================= */
-
-.result{
-  margin-top:22px;
-
-  padding:22px;
-}
-
-.resultTop{
   display:flex;
 
   justify-content:space-between;
 
   align-items:end;
 
-  border-bottom:
-    1px solid
-    var(--line);
+  margin-bottom:13px;
 
-  padding:0 2px 16px;
 }
 
-.resultName{
-  font:
-    600 22px
-    "Noto Serif KR",
-    serif;
+.episodeTitle{
 
-  letter-spacing:-.06em;
-}
-
-.summary{
-  text-align:right;
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.6;
-}
-
-.summary strong{
   font:
     600 19px
     "Noto Serif KR",
     serif;
 
-  color:var(--ink);
+  letter-spacing:-.07em;
+
 }
 
-.day{
-  padding-top:20px;
+.episodeDesc{
+
+  color:#999188;
+
+  font-size:8px;
+
 }
 
-.day h2{
+.episodeGrid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(6,1fr);
+
+  gap:8px;
+
+}
+
+.episode{
+
+  min-height:140px;
+
+  padding:13px;
+
+  border:
+    1px solid
+    #e7e0d7;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdfa,
+      #faf6f0
+    );
+
+}
+
+.episodeNo{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:22px;
+
+  height:22px;
+
+  border-radius:50%;
+
+  background:#eee8df;
+
+  color:#776f65;
+
+  font-size:8px;
+
+  font-weight:800;
+
+}
+
+.episodeTime{
+
+  margin-top:13px;
+
   font:
-    600 16px
+    500 14px
     "Noto Serif KR",
     serif;
 
-  margin:0 0 9px;
+}
+
+.episodeDate{
+
+  margin-top:3px;
+
+  color:#8b837a;
+
+  font-size:8px;
+
+}
+
+.episodePeople{
+
+  display:flex;
+
+  gap:6px;
+
+  margin-top:17px;
+
+  color:#4d4740;
+
+  font-size:9px;
+
+}
+
+.episodeBookings{
+
+  margin-top:5px;
+
+  color:#999188;
+
+  font-size:8px;
+
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.resultPage{
+  display:none;
+}
+
+.back{
+
+  border:0;
+
+  background:transparent;
+
+  color:#777067;
+
+  padding:0;
+
+  margin:
+    0
+    0
+    11px;
+
+  font-size:9px;
+
+  font-weight:800;
+
+}
+
+.resultCard{
+
+  padding:22px;
+
+}
+
+.resultTop{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:end;
+
+  padding-bottom:15px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+}
+
+.resultName{
+
+  font:
+    600 22px
+    "Noto Serif KR",
+    serif;
+
+  letter-spacing:-.08em;
+
+}
+
+.summary{
+
+  color:#777067;
+
+  text-align:right;
+
+  font-size:9px;
+
+  line-height:1.5;
+
+}
+
+.summary strong{
+
+  color:var(--ink);
+
+  font:
+    500 21px
+    "Noto Serif KR",
+    serif;
+
+}
+
+.day{
+
+  padding-top:19px;
+
+}
+
+.day h2{
+
+  margin:
+    0
+    0
+    8px;
+
+  font:
+    600 15px
+    "Noto Serif KR",
+    serif;
+
 }
 
 .time{
+
   overflow:hidden;
 
   border:
     1px solid
     var(--line);
 
-  border-radius:17px;
+  border-radius:15px;
 
-  background:#fff;
+  background:white;
 
-  margin:8px 0;
+  margin:
+    7px
+    0;
+
 }
 
 .timeHead{
+
   display:flex;
 
   justify-content:space-between;
 
   align-items:center;
 
-  padding:13px 15px;
+  padding:
+    12px
+    14px;
 
-  background:var(--soft);
+  background:#faf7f2;
 
   border-bottom:
     1px solid
     var(--line);
+
 }
 
 .timeLabel{
-  font-size:13px;
+
+  font-size:11px;
 
   font-weight:800;
+
 }
 
 .timeMeta{
-  font-size:9px;
 
-  color:#858079;
+  color:#898178;
+
+  font-size:8px;
+
 }
 
 .person{
+
   display:flex;
 
   justify-content:space-between;
 
-  align-items:center;
-
-  padding:12px 15px;
+  padding:
+    11px
+    14px;
 
   border-bottom:
-    1px solid #f0ede8;
+    1px solid
+    #f1eee9;
+
 }
 
 .person:last-child{
@@ -637,200 +1178,316 @@ input{
 }
 
 .personName{
-  font-size:12px;
+
+  font-size:10px;
 
   font-weight:700;
+
 }
 
 .personCount{
-  font-size:10px;
 
-  color:#77716b;
+  color:#777067;
+
+  font-size:9px;
+
 }
-
-/* =========================
-   EMPTY
-========================= */
 
 .empty{
+
+  padding:45px 10px;
+
+  color:#888078;
+
   text-align:center;
 
-  padding:46px 10px;
+  font-size:10px;
 
-  color:#777;
-
-  font-size:12px;
 }
 
-/* =========================
-   BACK
-========================= */
+.error{
 
-.back{
-  border:0;
+  color:#a53b34;
 
-  background:transparent;
+  min-height:14px;
 
-  color:#777;
+  margin-top:6px;
 
-  font-size:11px;
+  font-size:8px;
 
-  font-weight:800;
+}
 
-  padding:0;
+.status{
 
-  margin:0 0 13px;
+  margin-top:7px;
 
-  cursor:pointer;
+  color:#a39a91;
+
+  font-size:7px;
+
 }
 
 /* =========================
    FOOTER
 ========================= */
 
-footer{
+.footer{
+
+  margin-top:17px;
+
+  color:#a69d93;
+
   text-align:center;
 
-  color:#aaa39b;
+  font-size:8px;
 
-  font-size:9px;
-
-  margin-top:18px;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  text-align:center;
-
-  padding:30px 10px;
-
-  color:#99928a;
-
-  font-size:10px;
 }
 
 /* =========================
    MOBILE
 ========================= */
 
+@media(max-width:900px){
+
+  .mainGrid{
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+  .actionsCard{
+
+    grid-column:
+      1 / -1;
+
+    display:grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap:7px;
+
+  }
+
+  .action{
+
+    margin:0;
+
+  }
+
+  .actionNote{
+
+    grid-column:
+      1 / -1;
+
+  }
+
+  .episodeGrid{
+
+    grid-template-columns:
+      repeat(3,1fr);
+
+  }
+
+}
+
 @media(max-width:650px){
 
   .wrap{
-    width:calc(100% - 14px);
 
-    padding-top:10px;
+    width:
+      calc(100% - 16px);
+
+    padding-top:9px;
+
   }
 
-  .topbar{
-    padding-bottom:10px;
+  .hero{
+
+    grid-template-columns:
+      1fr;
+
+    min-height:auto;
+
   }
 
-  .poster{
-    border-radius:20px;
+  .heroPoster{
+
+    height:350px;
+
+    min-height:0;
+
   }
 
-  .search{
-    padding:19px;
+  .heroPhoto{
+
+    height:300px;
+
+    min-height:0;
+
   }
 
-  .title{
-    font-size:21px;
+  .heroPhoto::before{
+
+    left:0;
+    top:0;
+    right:0;
+    bottom:auto;
+
+    width:auto;
+    height:70px;
+
+    background:
+      linear-gradient(
+        180deg,
+        #eee8df,
+        transparent
+      );
+
   }
 
-  .stats{
-    grid-template-columns:1fr 1fr;
+  .mainGrid{
+
+    grid-template-columns:1fr;
+
   }
 
-  .stat:last-child{
-    grid-column:1/-1;
+  .actionsCard{
+
+    grid-template-columns:1fr;
+
   }
 
-  .stat{
-    padding:15px;
+  .statsGrid{
+
+    grid-template-columns:
+      1fr
+      1fr;
+
   }
 
-  .value{
-    font-size:21px;
+  .statBox:last-child{
+
+    grid-column:
+      1 / -1;
+
+  }
+
+  .episodeGrid{
+
+    grid-template-columns:
+      1fr 1fr;
+
   }
 
   .episodeSection{
-    padding:18px 15px;
 
-    border-radius:21px;
+    padding:17px;
+
   }
 
-  .episodes{
-    grid-template-columns:
-      repeat(2,1fr);
-  }
+  .episodeHeader{
 
-  .episodeCard{
-    padding:14px;
-  }
-
-  .episodeDate{
-    font-size:13px;
-  }
-
-  .episodePeople{
-    font-size:21px;
-  }
-
-  .result{
-    padding:17px 13px;
-
-    border-radius:21px;
-  }
-
-  .resultTop{
     align-items:flex-start;
 
     flex-direction:column;
 
-    gap:5px;
+    gap:4px;
+
+  }
+
+  .searchRow{
+
+    flex-direction:column;
+
+  }
+
+  .searchButton{
+
+    width:100%;
+
+  }
+
+  .compareGrid{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .resultTop{
+
+    align-items:flex-start;
+
+    flex-direction:column;
+
+    gap:6px;
+
   }
 
   .summary{
+
     text-align:left;
-  }
 
-  .row .btn{
-    padding:0 18px;
-  }
-}
-
-@media(max-width:390px){
-
-  .episodes{
-    grid-template-columns:1fr;
   }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
-<main class="wrap">
+<div class="wrap">
 
-  <!-- 상단 -->
-  <div class="topbar">
-    <div class="brand">유작</div>
-    <div class="date">2026 · RESERVATION</div>
-  </div>
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="header">
+
+    <div class="logo">
+      유작
+    </div>
+
+    <div class="headerRight">
+      2026 · RESERVATION
+    </div>
+
+  </header>
 
 
-  <!-- 포스터 -->
-  <div class="poster">
-    <img
-      src="/poster.png"
-      alt="유작 공연 포스터"
-    >
-  </div>
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <section class="hero">
+
+    <div class="heroPoster">
+
+      <img
+        src="/poster.png"
+        alt="유작 포스터"
+      >
+
+    </div>
+
+    <div class="heroPhoto">
+
+      <img
+        src="/cast.jpg"
+        alt="유작 배우 단체사진"
+      >
+
+      <div class="heroCaption">
+        CAST · 2026
+      </div>
+
+    </div>
+
+  </section>
 
 
   <!-- =========================
@@ -839,143 +1496,307 @@ footer{
 
   <section id="home">
 
-    <!-- 검색 -->
-    <div class="card search">
+    <div class="mainGrid">
 
-      <div class="eyebrow">
-        RESERVATION CHECK
-      </div>
 
-      <h1 class="title">
-        배우 이름을 입력하세요
-      </h1>
+      <!-- 검색 -->
 
-      <div class="desc">
-        배우 이름을 입력하면 해당 배우의
-        예매 현황을 날짜와 시간별로 확인할 수 있습니다.
-      </div>
+      <div class="card searchCard">
 
-      <div class="row">
+        <div class="eyebrow">
+          RESERVATION CHECK
+        </div>
 
-        <input
-          id="nameInput"
-          class="input"
-          placeholder="배우 이름을 입력하세요"
-          autocomplete="off"
-          maxlength="50"
+        <h1 class="searchTitle">
+          배우 / 예매자 검색
+        </h1>
+
+        <div class="searchDesc">
+          배우 이름 또는 예매자 성함을 입력하면
+          예매 현황을 확인할 수 있습니다.
+        </div>
+
+
+        <div class="searchTabs">
+
+          <button
+            class="searchTab active"
+            data-type="friend"
+          >
+            배우 이름
+          </button>
+
+          <button
+            class="searchTab"
+            data-type="booker"
+          >
+            예매자 성함
+          </button>
+
+        </div>
+
+
+        <div class="searchRow">
+
+          <input
+            id="nameInput"
+            class="searchInput"
+            type="text"
+            placeholder="배우 이름을 입력하세요"
+            autocomplete="off"
+            maxlength="50"
+          >
+
+          <button
+            id="searchBtn"
+            class="searchButton"
+          >
+            검색
+          </button>
+
+        </div>
+
+
+        <div
+          id="error"
+          class="error"
+        ></div>
+
+        <div
+          id="status"
+          class="status"
         >
+          데이터 확인 중…
+        </div>
+
+
+        <div class="quick">
+
+          <span class="quickLabel">
+            인기 검색어
+          </span>
+
+          <button
+            class="quickBtn"
+            data-name="정우영"
+          >
+            정우영
+          </button>
+
+          <button
+            class="quickBtn"
+            data-name="김명훈"
+          >
+            김명훈
+          </button>
+
+          <button
+            class="quickBtn"
+            data-name="박경희"
+          >
+            박경희
+          </button>
+
+          <button
+            class="quickBtn"
+            data-name="이희성"
+          >
+            이희성
+          </button>
+
+          <button
+            class="quickBtn"
+            data-name="서태원"
+          >
+            서태원
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- 전체 통계 -->
+
+      <div class="card statsCard">
+
+        <div class="cardHeading">
+
+          <div class="cardTitle">
+            전체 예매 현황
+          </div>
+
+          <div class="cardSub">
+            마지막 업데이트
+            <span id="updateTime">
+              확인 중
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="statsGrid">
+
+
+          <div class="statBox">
+
+            <div class="statLabel">
+              전체 예매 건수
+            </div>
+
+            <div
+              id="allBookings"
+              class="statValue"
+            >
+              -
+              <small>건</small>
+            </div>
+
+          </div>
+
+
+          <div class="statBox">
+
+            <div class="statLabel">
+              전체 예매 인원
+            </div>
+
+            <div
+              id="allPeople"
+              class="statValue"
+            >
+              -
+              <small>명</small>
+            </div>
+
+          </div>
+
+
+          <div class="statBox">
+
+            <div class="statLabel">
+              데이터 기준
+            </div>
+
+            <div
+              id="dataDate"
+              class="statDate"
+            >
+              확인 중…
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- 액션 -->
+
+      <div class="card actionsCard">
 
         <button
-          id="searchBtn"
-          class="btn"
+          id="compareBtn"
+          class="action"
         >
-          확인
+
+          <div class="actionLeft">
+
+            <div class="actionIcon">
+              ◌
+            </div>
+
+            <div class="actionText">
+
+              <strong>
+                점심 · 저녁 공연 비교
+              </strong>
+
+              <span>
+                지정 20명 공연별 확인
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
         </button>
 
-      </div>
 
-      <div
-        id="status"
-        class="meta"
-      >
-        엑셀 데이터 확인 중…
-      </div>
-
-      <div
-        id="error"
-        class="error"
-      ></div>
-
-    </div>
-
-
-    <div class="privacy">
-      예매자 성함은 그대로 표시되며,
-      연락처는 공개하지 않습니다.
-    </div>
-
-
-    <!-- 전체 통계 -->
-    <div class="stats">
-
-      <div class="card stat">
-
-        <div class="label">
-          전체 예매 건수
-        </div>
-
-        <div
-          id="allBookings"
-          class="value"
+        <button
+          id="compareCloseBtn"
+          class="action"
+          style="display:none"
         >
-          — <small>건</small>
-        </div>
 
-      </div>
+          <div class="actionLeft">
+
+            <div class="actionIcon">
+              ×
+            </div>
+
+            <div class="actionText">
+
+              <strong>
+                비교 결과 닫기
+              </strong>
+
+              <span>
+                메인 화면으로 돌아가기
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="arrow">
+            ‹
+          </div>
+
+        </button>
 
 
-      <div class="card stat">
+        <div class="actionNote">
 
-        <div class="label">
-          전체 예매 인원
-        </div>
-
-        <div
-          id="allPeople"
-          class="value"
-        >
-          — <small>명</small>
-        </div>
-
-      </div>
-
-
-      <div class="card stat">
-
-        <div class="label">
-          데이터 기준
-        </div>
-
-        <div class="update">
-
-          <strong id="allUpdated">
-            확인 중…
-          </strong>
-
-          엑셀 마지막 응답 기준
+          지인 선택을 하지 않은 예매자도
+          전체 인원 및 회차별 현황에 포함됩니다.
 
         </div>
 
       </div>
 
     </div>
+
+
+    <!-- 비교 결과 -->
+
+    <div
+      id="compareBox"
+      class="card compareBox"
+    ></div>
 
 
     <!-- =========================
-         회차별 현황
+         EPISODES
     ========================== -->
 
-    <section class="episodeSection">
+    <section class="card episodeSection">
 
       <div class="episodeHeader">
 
-        <div>
-
-          <div class="eyebrow">
-            EPISODE STATUS
-          </div>
-
-          <h2 class="episodeTitle">
-            회차별 예매 현황
-          </h2>
-
+        <div class="episodeTitle">
+          회차별 예매 현황
         </div>
 
-        <div
-          id="episodeTotal"
-          class="episodeTotal"
-        >
-          총 6회
+        <div class="episodeDesc">
+          예매된 회차별 인원과 건수를 확인할 수 있습니다.
         </div>
 
       </div>
@@ -983,39 +1804,26 @@ footer{
 
       <div
         id="episodes"
-        class="episodes"
-      >
-
-        <div class="loading">
-          회차별 데이터를 불러오는 중…
-        </div>
-
-      </div>
-
-
-      <div class="refreshRow">
-
-        <button
-          id="refreshBtn"
-          class="refreshBtn"
-        >
-          ↻ 데이터 새로고침
-        </button>
-
-      </div>
+        class="episodeGrid"
+      ></div>
 
     </section>
+
+
+    <div class="footer">
+      YUJAK · RESERVATION SYSTEM
+    </div>
 
   </section>
 
 
   <!-- =========================
-       SEARCH RESULT
+       RESULT
   ========================== -->
 
   <section
     id="result"
-    style="display:none"
+    class="resultPage"
   >
 
     <button
@@ -1026,7 +1834,7 @@ footer{
     </button>
 
 
-    <div class="card result">
+    <div class="card resultCard">
 
       <div class="resultTop">
 
@@ -1048,33 +1856,78 @@ footer{
     </div>
 
 
-    <footer id="resultUpdated"></footer>
+    <div
+      id="resultUpdated"
+      class="footer"
+    ></div>
 
   </section>
 
-
-</main>
+</div>
 
 
 <script>
 
 /* =========================
-   HELPERS
+   상태
 ========================= */
 
-const $ = selector =>
-  document.querySelector(selector);
+let searchType =
+  'friend';
 
 
-const fmt = value => {
+/* =========================
+   DOM
+========================= */
+
+const $ =
+  selector =>
+    document.querySelector(
+      selector
+    );
+
+
+/* =========================
+   Escape
+========================= */
+
+function esc(value){
+
+  return String(value)
+    .replace(
+      /[&<>"']/g,
+      char => ({
+
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#039;'
+
+      }[char])
+    );
+
+}
+
+
+/* =========================
+   날짜 포맷
+========================= */
+
+function fmt(value){
 
   if(!value){
     return '-';
   }
 
-  const d = new Date(value);
+  const date =
+    new Date(value);
 
-  if(Number.isNaN(d.getTime())){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
     return value;
   }
 
@@ -1082,270 +1935,200 @@ const fmt = value => {
     'ko-KR',
     {
       year:'numeric',
-      month:'numeric',
-      day:'numeric',
+      month:'2-digit',
+      day:'2-digit',
       hour:'2-digit',
       minute:'2-digit',
       hour12:false,
       timeZone:'Asia/Seoul'
     }
-  ).format(d);
+  ).format(date);
 
-};
-
-
-const number = value =>
-  Number(value || 0).toLocaleString('ko-KR');
-
-
-const esc = value =>
-  String(value ?? '').replace(
-    /[&<>"']/g,
-    m => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#039;'
-    }[m])
-  );
+}
 
 
 /* =========================
-   회차 표시
+   검색 방식 변경
 ========================= */
 
-function renderEpisodes(episodes, totalPeople){
+document
+  .querySelectorAll(
+    '.searchTab'
+  )
+  .forEach(button => {
 
-  const container =
-    $('#episodes');
+    button.addEventListener(
+      'click',
+      () => {
 
-  if(!Array.isArray(episodes)){
-    container.innerHTML =
-      '<div class="empty">회차 데이터를 불러오지 못했습니다.</div>';
+        document
+          .querySelectorAll(
+            '.searchTab'
+          )
+          .forEach(
+            b =>
+              b.classList.remove(
+                'active'
+              )
+          );
 
-    return;
-  }
+        button.classList.add(
+          'active'
+        );
 
+        searchType =
+          button.dataset.type;
 
-  const list =
-    Array.from(
-      {length:6},
-      (_,index) => episodes[index]
-    );
+        $('#nameInput').value =
+          '';
 
+        $('#error').textContent =
+          '';
 
-  // 가장 많은 인원이 들어간 회차
-  const maxPeople =
-    Math.max(
-      ...episodes.map(e =>
-        Number(e.people || 0)
-      ),
-      1
-    );
+        $('#nameInput').placeholder =
+          searchType === 'friend'
+            ? '배우 이름을 입력하세요'
+            : '예매자 성함을 입력하세요';
 
-
-  container.innerHTML =
-    list.map((episode,index) => {
-
-      const episodeNumber =
-        index + 1;
-
-
-      // 아직 회차 데이터가 없는 경우
-      if(!episode){
-
-        return `
-
-          <div class="episodeCard episodeEmpty">
-
-            <div class="episodeNumber">
-              EPISODE ${String(episodeNumber).padStart(2,'0')}
-            </div>
-
-            <div class="episodeDate">
-              ${episodeNumber}회차
-            </div>
-
-            <div class="episodePeople">
-              —
-              <small>명</small>
-            </div>
-
-            <div class="episodeBookings">
-              아직 예매 데이터 없음
-            </div>
-
-            <div class="episodeRatio">
-              <span style="width:0%"></span>
-            </div>
-
-          </div>
-
-        `;
       }
+    );
 
-
-      const people =
-        Number(episode.people || 0);
-
-      const bookings =
-        Number(episode.bookings || 0);
-
-
-      const ratio =
-        totalPeople > 0
-          ? Math.min(
-              100,
-              (people / totalPeople) * 100
-            )
-          : 0;
-
-
-      return `
-
-        <div class="episodeCard">
-
-          <div class="episodeNumber">
-            EPISODE ${String(episodeNumber).padStart(2,'0')}
-          </div>
-
-          <div class="episodeDate">
-            ${esc(episode.label)}
-          </div>
-
-          <div class="episodePeople">
-            ${number(people)}
-            <small>명</small>
-          </div>
-
-          <div class="episodeBookings">
-            ${number(bookings)}건 예매
-            · 전체의 ${ratio.toFixed(1)}%
-          </div>
-
-          <div class="episodeRatio">
-            <span style="width:${Math.min(
-              100,
-              (people / maxPeople) * 100
-            )}%"></span>
-          </div>
-
-        </div>
-
-      `;
-
-    })
-    .join('');
-
-
-  $('#episodeTotal').textContent =
-    `총 ${episodes.length}회`;
-
-}
+  });
 
 
 /* =========================
    전체 상태
 ========================= */
 
-async function status(){
-
-  const refresh =
-    $('#refreshBtn');
-
-  if(refresh){
-
-    refresh.disabled = true;
-
-    refresh.textContent =
-      '↻ 불러오는 중…';
-
-  }
-
+async function loadStatus(){
 
   try{
 
     const response =
       await fetch(
-        '/api/status?_=' + Date.now()
+        '/api/status'
       );
-
 
     const data =
       await response.json();
 
-
     if(!response.ok){
 
-      throw Error(
-        data.error ||
-        '데이터를 불러오지 못했습니다.'
+      throw new Error(
+        data.error
       );
 
     }
 
 
-    /* 전체 통계 */
-
     $('#allBookings').innerHTML =
-      number(data.reservationCount) +
+      data.reservationCount +
       ' <small>건</small>';
 
 
     $('#allPeople').innerHTML =
-      number(data.totalPeople) +
+      data.totalPeople +
       ' <small>명</small>';
 
 
-    $('#allUpdated').textContent =
-      fmt(data.latestResponse);
+    $('#updateTime').textContent =
+      fmt(
+        data.latestResponse
+      );
+
+
+    $('#dataDate').textContent =
+      fmt(
+        data.latestResponse
+      ) +
+      ' 기준';
 
 
     $('#status').textContent =
-      '엑셀 마지막 응답: ' +
-      fmt(data.latestResponse) +
-      ' (KST)';
+      '엑셀 마지막 응답 · ' +
+      fmt(
+        data.latestResponse
+      );
 
-
-    /* 회차 */
 
     renderEpisodes(
-      data.episodes,
-      data.totalPeople
+      data.episodes || []
     );
-
 
   }catch(error){
 
     console.error(error);
 
-
     $('#status').textContent =
       '데이터를 불러오지 못했습니다.';
 
+  }
 
-    $('#episodes').innerHTML = `
+}
 
-      <div class="empty">
-        회차 데이터를 불러오지 못했습니다.<br>
-        잠시 후 다시 시도해주세요.
-      </div>
 
-    `;
+/* =========================
+   회차 렌더링
+========================= */
 
-  }finally{
+function renderEpisodes(
+  episodes
+){
 
-    if(refresh){
+  const element =
+    $('#episodes');
 
-      refresh.disabled = false;
+  if(!episodes.length){
 
-      refresh.textContent =
-        '↻ 데이터 새로고침';
+    element.innerHTML =
+      '<div class="empty">' +
+      '등록된 공연 회차가 없습니다.' +
+      '</div>';
 
-    }
+    return;
 
   }
+
+
+  element.innerHTML =
+    episodes
+      .map(
+        episode => `
+
+          <div class="episode">
+
+            <div class="episodeNo">
+              ${episode.episode}
+            </div>
+
+            <div class="episodeTime">
+              ${esc(
+                episode.label
+                  .split(' ')[2] ||
+                episode.label
+              )}
+            </div>
+
+            <div class="episodeDate">
+              ${episode.month}월
+              ${episode.day}일
+            </div>
+
+            <div class="episodePeople">
+              ◯
+              ${episode.people}명
+            </div>
+
+            <div class="episodeBookings">
+              ▤
+              ${episode.bookings}건
+            </div>
+
+          </div>
+
+        `
+      )
+      .join('');
 
 }
 
@@ -1354,21 +2137,27 @@ async function status(){
    검색
 ========================= */
 
-async function search(){
+async function search(
+  forcedName = null
+){
+
+  const input =
+    $('#nameInput');
 
   const name =
-    $('#nameInput')
-      .value
-      .trim();
+    forcedName !== null
+      ? forcedName.trim()
+      : input.value.trim();
 
-
-  $('#error').textContent = '';
-
+  $('#error').textContent =
+    '';
 
   if(!name){
 
     $('#error').textContent =
-      '배우 이름을 입력해주세요.';
+      searchType === 'friend'
+        ? '배우 이름을 입력해주세요.'
+        : '예매자 성함을 입력해주세요.';
 
     return;
 
@@ -1377,7 +2166,6 @@ async function search(){
 
   const button =
     $('#searchBtn');
-
 
   button.disabled = true;
 
@@ -1389,10 +2177,14 @@ async function search(){
 
     const response =
       await fetch(
-        '/api/search?name=' +
-        encodeURIComponent(name) +
-        '&_=' +
-        Date.now()
+        '/api/search?type=' +
+        encodeURIComponent(
+          searchType
+        ) +
+        '&name=' +
+        encodeURIComponent(
+          name
+        )
       );
 
 
@@ -1402,7 +2194,7 @@ async function search(){
 
     if(!response.ok){
 
-      throw Error(
+      throw new Error(
         data.error ||
         '조회에 실패했습니다.'
       );
@@ -1410,23 +2202,21 @@ async function search(){
     }
 
 
-    render(data);
-
+    renderResult(
+      data
+    );
 
   }catch(error){
 
-    console.error(error);
-
     $('#error').textContent =
-      error.message ||
-      '조회에 실패했습니다.';
+      error.message;
 
   }finally{
 
     button.disabled = false;
 
     button.textContent =
-      '확인';
+      '검색';
 
   }
 
@@ -1434,10 +2224,12 @@ async function search(){
 
 
 /* =========================
-   검색 결과
+   결과 렌더링
 ========================= */
 
-function render(data){
+function renderResult(
+  data
+){
 
   $('#home').style.display =
     'none';
@@ -1446,17 +2238,26 @@ function render(data){
     'block';
 
 
+  const typeLabel =
+    data.type === 'booker'
+      ? '예매자'
+      : '배우';
+
+
   $('#resultName').textContent =
     data.name +
-    '님 예매 현황';
+    ' · ' +
+    typeLabel +
+    ' 검색 결과';
 
 
   $('#summary').innerHTML =
+
     '<strong>' +
-    number(data.totalPeople) +
+    data.totalPeople +
     '명</strong><br>' +
-    '총 ' +
-    number(data.totalBookings) +
+
+    data.totalBookings +
     '건';
 
 
@@ -1464,9 +2265,15 @@ function render(data){
     new Map();
 
 
-  for(const reservation of data.reservations){
+  for(
+    const reservation
+    of data.reservations
+  ){
 
-    for(const slot of reservation.slots){
+    for(
+      const slot
+      of reservation.slots
+    ){
 
       const dayKey =
         slot.month +
@@ -1474,14 +2281,25 @@ function render(data){
         slot.day;
 
 
-      if(!days.has(dayKey)){
+      if(
+        !days.has(
+          dayKey
+        )
+      ){
 
         days.set(
           dayKey,
           {
-            month:slot.month,
-            day:slot.day,
-            times:new Map()
+
+            month:
+              slot.month,
+
+            day:
+              slot.day,
+
+            times:
+              new Map()
+
           }
         );
 
@@ -1489,21 +2307,30 @@ function render(data){
 
 
       const day =
-        days.get(dayKey);
+        days.get(
+          dayKey
+        );
 
 
-      if(!day.times.has(slot.key)){
+      if(
+        !day.times.has(
+          slot.key
+        )
+      ){
 
         day.times.set(
           slot.key,
           {
-            label:slot.label,
+
+            label:
+              slot.label,
 
             minutes:
               slot.hour * 60 +
               slot.minute,
 
             rows:[]
+
           }
         );
 
@@ -1511,13 +2338,16 @@ function render(data){
 
 
       const time =
-        day.times.get(slot.key);
+        day.times.get(
+          slot.key
+        );
 
 
       if(
         !time.rows.some(
           row =>
-            row.id === reservation.id
+            row.id ===
+            reservation.id
         )
       ){
 
@@ -1535,43 +2365,42 @@ function render(data){
   let html = '';
 
 
-  const sortedDays =
-    [...days.values()]
+  for(
+    const day
+    of [...days.values()]
       .sort(
         (a,b) =>
           a.month - b.month ||
           a.day - b.day
-      );
+      )
+  ){
+
+    html += `
+
+      <section class="day">
+
+        <h2>
+          ${day.month}월
+          ${day.day}일
+        </h2>
+
+    `;
 
 
-  for(const day of sortedDays){
-
-    html +=
-      '<section class="day">' +
-      '<h2>' +
-      day.month +
-      '월 ' +
-      day.day +
-      '일' +
-      '</h2>';
-
-
-    const sortedTimes =
-      [...day.times.values()]
+    for(
+      const time
+      of [...day.times.values()]
         .sort(
           (a,b) =>
             a.minutes -
             b.minutes
-        );
-
-
-    for(const time of sortedTimes){
+        )
+    ){
 
       const people =
         time.rows.reduce(
           (sum,row) =>
-            sum +
-            Number(row.count || 0),
+            sum + row.count,
           0
         );
 
@@ -1583,33 +2412,37 @@ function render(data){
           <div class="timeHead">
 
             <span class="timeLabel">
-              ${esc(time.label)}
+              ${esc(
+                time.label
+              )}
             </span>
 
             <span class="timeMeta">
-              ${number(time.rows.length)}건
+              ${time.rows.length}건
               ·
-              ${number(people)}명
+              ${people}명
             </span>
 
           </div>
 
           ${time.rows
-            .map(row => `
+            .map(
+              row => `
 
-              <div class="person">
+                <div class="person">
 
-                <span class="personName">
-                  ${esc(row.name)}
-                </span>
+                  <span class="personName">
+                    ${esc(row.name)}
+                  </span>
 
-                <span class="personCount">
-                  ${number(row.count)}명
-                </span>
+                  <span class="personCount">
+                    ${row.count}명
+                  </span>
 
-              </div>
+                </div>
 
-            `)
+              `
+            )
             .join('')}
 
         </div>
@@ -1627,62 +2460,324 @@ function render(data){
 
   $('#groups').innerHTML =
     html ||
-    '<div class="empty">해당 배우의 예매 내역이 없습니다.</div>';
+    `
+
+      <div class="empty">
+
+        해당 검색 결과가 없습니다.
+
+      </div>
+
+    `;
 
 
   $('#resultUpdated').textContent =
     '엑셀 마지막 응답 · ' +
-    fmt(data.latestResponse) +
+    fmt(
+      data.latestResponse
+    ) +
     ' (KST)';
 
 }
 
 
 /* =========================
-   EVENTS
+   공연 비교
 ========================= */
 
-$('#searchBtn').onclick =
-  search;
+async function comparePerformances(){
+
+  const box =
+    $('#compareBox');
+
+  const button =
+    $('#compareBtn');
+
+  button.disabled = true;
 
 
-$('#nameInput').onkeydown =
-  event => {
+  try{
 
-    if(event.key === 'Enter'){
+    const response =
+      await fetch(
+        '/api/compare-performances'
+      );
 
-      search();
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        '집계에 실패했습니다.'
+      );
 
     }
 
-  };
+
+    const lunchNames =
+      data.lunch.names
+        .map(
+          p =>
+            esc(p.name) +
+            ' ' +
+            p.count +
+            '명'
+        )
+        .join(', ') ||
+      '없음';
 
 
-$('#backBtn').onclick =
-  () => {
+    const dinnerNames =
+      data.dinner.names
+        .map(
+          p =>
+            esc(p.name) +
+            ' ' +
+            p.count +
+            '명'
+        )
+        .join(', ') ||
+      '없음';
 
-    $('#result').style.display =
-      'none';
 
-    $('#home').style.display =
+    const both =
+      data.both
+        .map(
+          name =>
+            esc(name)
+        )
+        .join(', ') ||
+      '없음';
+
+
+    box.innerHTML = `
+
+      <div class="cardHeading">
+
+        <div class="cardTitle">
+          점심 · 저녁 공연 비교
+        </div>
+
+        <div class="cardSub">
+          지정 20명 기준
+        </div>
+
+      </div>
+
+
+      <div class="compareGrid">
+
+        <div class="compareSide">
+
+          <b>
+            정우영 · 점심 3회
+          </b>
+
+          <div class="compareNum">
+            ${data.lunch.people}명
+          </div>
+
+          <div class="compareNames">
+            ${lunchNames}
+          </div>
+
+        </div>
+
+
+        <div class="compareSide">
+
+          <b>
+            김명훈 · 저녁 3회
+          </b>
+
+          <div class="compareNum">
+            ${data.dinner.people}명
+          </div>
+
+          <div class="compareNames">
+            ${dinnerNames}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="compareBoth">
+
+        <strong>
+          점심 + 저녁 모두 예매
+        </strong>
+
+        <br>
+
+        ${both}
+
+      </div>
+
+
+      <div class="compareNote">
+
+        지인 선택 값은 사용하지 않고
+        실제 예매 일자와 시간으로 분류합니다.
+
+      </div>
+
+    `;
+
+
+    box.style.display =
       'block';
 
-    $('#nameInput').focus();
 
-  };
+    button.style.display =
+      'none';
 
 
-$('#refreshBtn').onclick =
-  status;
+    $('#compareCloseBtn')
+      .style.display =
+      'flex';
+
+  }catch(error){
+
+    box.innerHTML =
+      '<div class="empty">' +
+      esc(error.message) +
+      '</div>';
+
+    box.style.display =
+      'block';
+
+  }finally{
+
+    button.disabled = false;
+
+  }
+
+}
 
 
 /* =========================
-   INITIAL LOAD
+   검색 버튼
 ========================= */
 
-status();
+$('#searchBtn')
+  .addEventListener(
+    'click',
+    () => search()
+  );
+
+
+$('#nameInput')
+  .addEventListener(
+    'keydown',
+    event => {
+
+      if(
+        event.key === 'Enter'
+      ){
+
+        search();
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   빠른 검색
+========================= */
+
+document
+  .querySelectorAll(
+    '.quickBtn'
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        const name =
+          button.dataset.name;
+
+        search(name);
+
+      }
+    );
+
+  });
+
+
+/* =========================
+   비교 버튼
+========================= */
+
+$('#compareBtn')
+  .addEventListener(
+    'click',
+    comparePerformances
+  );
+
+
+$('#compareCloseBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      $('#compareBox')
+        .style.display =
+        'none';
+
+      $('#compareBtn')
+        .style.display =
+        'flex';
+
+      $('#compareCloseBtn')
+        .style.display =
+        'none';
+
+    }
+  );
+
+
+/* =========================
+   뒤로가기
+========================= */
+
+$('#backBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      $('#result')
+        .style.display =
+        'none';
+
+      $('#home')
+        .style.display =
+        'block';
+
+      $('#nameInput')
+        .focus();
+
+    }
+  );
+
+
+/* =========================
+   시작
+========================= */
+
+loadStatus();
 
 </script>
 
 </body>
+
 </html>
