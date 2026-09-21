@@ -12,7 +12,7 @@
 
 <meta
   name="theme-color"
-  content="#f5f1eb"
+  content="#f4f0e9"
 >
 
 <title>유작 · 예매 현황</title>
@@ -96,9 +96,10 @@ button{
 
 }
 
-/* =========================
-   Header
-========================= */
+
+/* =================================
+   HEADER
+================================= */
 
 .header{
 
@@ -136,9 +137,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    HERO
-========================= */
+================================= */
 
 .hero{
 
@@ -160,8 +162,6 @@ button{
   box-shadow:var(--shadow);
 
 }
-
-/* 포스터 */
 
 .heroPoster{
 
@@ -187,8 +187,6 @@ button{
 
 }
 
-/* 단체사진 */
-
 .heroPhoto{
 
   position:relative;
@@ -212,8 +210,6 @@ button{
   object-fit:cover;
 
 }
-
-/* 가운데 자연스러운 연결 */
 
 .heroPhoto::before{
 
@@ -241,8 +237,6 @@ button{
 
 }
 
-/* hero 하단 캡션 */
-
 .heroCaption{
 
   position:absolute;
@@ -264,9 +258,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    MAIN GRID
-========================= */
+================================= */
 
 .mainGrid{
 
@@ -283,9 +278,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    CARD
-========================= */
+================================= */
 
 .card{
 
@@ -302,9 +298,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    SEARCH
-========================= */
+================================= */
 
 .searchCard{
 
@@ -351,8 +348,6 @@ button{
   margin-bottom:14px;
 
 }
-
-/* 검색 종류 */
 
 .searchTabs{
 
@@ -471,8 +466,6 @@ button{
 
 }
 
-/* 추천 검색 */
-
 .quick{
 
   display:flex;
@@ -515,9 +508,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    STATS
-========================= */
+================================= */
 
 .statsCard{
 
@@ -630,111 +624,14 @@ button{
 
 }
 
-/* =========================
-   SIDE ACTIONS
-========================= */
+
+/* =================================
+   ACTION AREA
+================================= */
 
 .actionsCard{
 
   padding:11px;
-
-}
-
-.action{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  width:100%;
-
-  min-height:60px;
-
-  padding:
-    0
-    13px;
-
-  border:
-    1px solid
-    #e2dbd2;
-
-  border-radius:15px;
-
-  background:#fcfaf7;
-
-  color:var(--ink);
-
-  text-align:left;
-
-  margin-bottom:7px;
-
-}
-
-.action:last-child{
-  margin-bottom:0;
-}
-
-.action:hover{
-  background:white;
-}
-
-.actionIcon{
-
-  width:27px;
-
-  height:27px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:#f0ebe4;
-
-  margin-right:9px;
-
-}
-
-.actionLeft{
-
-  display:flex;
-
-  align-items:center;
-
-  min-width:0;
-
-}
-
-.actionText strong{
-
-  display:block;
-
-  font-size:10px;
-
-  margin-bottom:2px;
-
-}
-
-.actionText span{
-
-  display:block;
-
-  color:#999188;
-
-  font-size:7px;
-
-}
-
-.arrow{
-
-  color:#938b82;
-
-  font-size:14px;
 
 }
 
@@ -753,9 +650,181 @@ button{
 
 }
 
-/* =========================
-   COMPARE
-========================= */
+
+/* =================================
+   귀여운 비교 버튼
+================================= */
+
+.cuteCompareBtn{
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+
+  width:100%;
+
+  min-height:76px;
+
+  padding:12px 14px;
+
+  margin-bottom:7px;
+
+  border:
+    1px solid
+    #e5ddd3;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffdf9 0%,
+      #f9f1e7 100%
+    );
+
+  color:var(--ink);
+
+  text-align:left;
+
+  box-shadow:
+    0 6px 18px
+    rgba(80,60,40,.06);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+
+}
+
+.cuteCompareBtn:hover{
+
+  transform:
+    translateY(-2px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffefa 0%,
+      #f6eadc 100%
+    );
+
+  box-shadow:
+    0 10px 25px
+    rgba(80,60,40,.11);
+
+}
+
+.cuteCompareBtn:active{
+
+  transform:
+    translateY(0);
+
+}
+
+.cuteCompareBtn:disabled{
+
+  opacity:.6;
+
+  cursor:wait;
+
+}
+
+.cuteIcon{
+
+  flex:0 0 46px;
+
+  width:46px;
+
+  height:46px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  margin-right:11px;
+
+  border-radius:15px;
+
+  background:#f3e5d6;
+
+  font-size:25px;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(120,90,60,.05);
+
+}
+
+.cuteText{
+
+  min-width:0;
+
+  flex:1;
+
+}
+
+.cuteText strong{
+
+  display:block;
+
+  margin-bottom:4px;
+
+  font:
+    600 12px
+    "Noto Serif KR",
+    serif;
+
+  letter-spacing:-.05em;
+
+}
+
+.cuteText span{
+
+  display:block;
+
+  color:#938a80;
+
+  font-size:8px;
+
+  line-height:1.4;
+
+}
+
+.cuteArrow{
+
+  flex:0 0 auto;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:30px;
+
+  height:30px;
+
+  margin-left:8px;
+
+  border-radius:50%;
+
+  background:#f1e7dc;
+
+  color:#8a7969;
+
+  font-size:13px;
+
+}
+
+
+/* =================================
+   COMPARE RESULT
+================================= */
 
 .compareBox{
 
@@ -799,7 +868,7 @@ button{
 
   color:#938b82;
 
-  font-size:8px;
+  font-size:9px;
 
   margin-bottom:5px;
 
@@ -808,9 +877,11 @@ button{
 .compareNum{
 
   font:
-    500 25px
+    500 29px
     "Noto Serif KR",
     serif;
+
+  letter-spacing:-.08em;
 
 }
 
@@ -828,11 +899,13 @@ button{
 
 .compareBoth{
 
-  margin-top:9px;
+  margin-top:12px;
 
-  padding-top:9px;
+  padding-top:12px;
 
-  border-top:1px solid var(--line);
+  border-top:
+    1px solid
+    var(--line);
 
   color:#777067;
 
@@ -854,9 +927,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    EPISODES
-========================= */
+================================= */
 
 .episodeSection{
 
@@ -998,12 +1072,15 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    RESULT
-========================= */
+================================= */
 
 .resultPage{
+
   display:none;
+
 }
 
 .back{
@@ -1116,8 +1193,7 @@ button{
   background:white;
 
   margin:
-    7px
-    0;
+    7px 0;
 
 }
 
@@ -1174,7 +1250,9 @@ button{
 }
 
 .person:last-child{
+
   border-bottom:0;
+
 }
 
 .personName{
@@ -1227,9 +1305,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    FOOTER
-========================= */
+================================= */
 
 .footer{
 
@@ -1243,9 +1322,10 @@ button{
 
 }
 
-/* =========================
+
+/* =================================
    MOBILE
-========================= */
+================================= */
 
 @media(max-width:900px){
 
@@ -1258,26 +1338,6 @@ button{
   }
 
   .actionsCard{
-
-    grid-column:
-      1 / -1;
-
-    display:grid;
-
-    grid-template-columns:
-      1fr 1fr;
-
-    gap:7px;
-
-  }
-
-  .action{
-
-    margin:0;
-
-  }
-
-  .actionNote{
 
     grid-column:
       1 / -1;
@@ -1349,12 +1409,6 @@ button{
   }
 
   .mainGrid{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .actionsCard{
 
     grid-template-columns:1fr;
 
@@ -1434,17 +1488,52 @@ button{
 
 }
 
+
+/* =================================
+   EXTRA MOBILE
+================================= */
+
+@media(max-width:420px){
+
+  .cuteText strong{
+
+    font-size:11px;
+
+  }
+
+  .cuteText span{
+
+    font-size:7px;
+
+  }
+
+  .cuteIcon{
+
+    width:42px;
+
+    height:42px;
+
+    flex-basis:42px;
+
+    font-size:22px;
+
+  }
+
+}
+
 </style>
 
 </head>
+
 
 <body>
 
 <div class="wrap">
 
-  <!-- =========================
+
+  <!-- =================================
        HEADER
-  ========================== -->
+  ================================= -->
 
   <header class="header">
 
@@ -1459,11 +1548,14 @@ button{
   </header>
 
 
-  <!-- =========================
+  <!-- =================================
        HERO
-  ========================== -->
+  ================================= -->
 
   <section class="hero">
+
+
+    <!-- 포스터 -->
 
     <div class="heroPoster">
 
@@ -1473,6 +1565,9 @@ button{
       >
 
     </div>
+
+
+    <!-- 단체사진 -->
 
     <div class="heroPhoto">
 
@@ -1487,35 +1582,46 @@ button{
 
     </div>
 
+
   </section>
 
 
-  <!-- =========================
+  <!-- =================================
        HOME
-  ========================== -->
+  ================================= -->
 
   <section id="home">
+
 
     <div class="mainGrid">
 
 
-      <!-- 검색 -->
+      <!-- =================================
+           검색 카드
+      ================================= -->
 
       <div class="card searchCard">
+
 
         <div class="eyebrow">
           RESERVATION CHECK
         </div>
 
+
         <h1 class="searchTitle">
           배우 / 예매자 검색
         </h1>
 
+
         <div class="searchDesc">
+
           배우 이름 또는 예매자 성함을 입력하면
           예매 현황을 확인할 수 있습니다.
+
         </div>
 
+
+        <!-- 검색 방식 -->
 
         <div class="searchTabs">
 
@@ -1525,6 +1631,7 @@ button{
           >
             배우 이름
           </button>
+
 
           <button
             class="searchTab"
@@ -1547,6 +1654,7 @@ button{
             maxlength="50"
           >
 
+
           <button
             id="searchBtn"
             class="searchButton"
@@ -1562,6 +1670,7 @@ button{
           class="error"
         ></div>
 
+
         <div
           id="status"
           class="status"
@@ -1570,11 +1679,14 @@ button{
         </div>
 
 
+        <!-- 빠른 검색 -->
+
         <div class="quick">
 
           <span class="quickLabel">
-            인기 검색어
+            빠른 검색
           </span>
+
 
           <button
             class="quickBtn"
@@ -1583,12 +1695,14 @@ button{
             정우영
           </button>
 
+
           <button
             class="quickBtn"
             data-name="김명훈"
           >
             김명훈
           </button>
+
 
           <button
             class="quickBtn"
@@ -1597,12 +1711,14 @@ button{
             박경희
           </button>
 
+
           <button
             class="quickBtn"
             data-name="이희성"
           >
             이희성
           </button>
+
 
           <button
             class="quickBtn"
@@ -1613,12 +1729,16 @@ button{
 
         </div>
 
+
       </div>
 
 
-      <!-- 전체 통계 -->
+      <!-- =================================
+           전체 통계
+      ================================= -->
 
       <div class="card statsCard">
+
 
         <div class="cardHeading">
 
@@ -1626,11 +1746,15 @@ button{
             전체 예매 현황
           </div>
 
+
           <div class="cardSub">
+
             마지막 업데이트
+
             <span id="updateTime">
               확인 중
             </span>
+
           </div>
 
         </div>
@@ -1694,70 +1818,71 @@ button{
       </div>
 
 
-      <!-- 액션 -->
+      <!-- =================================
+           귀여운 비교 버튼
+      ================================= -->
 
       <div class="card actionsCard">
 
+
         <button
           id="compareBtn"
-          class="action"
+          class="cuteCompareBtn"
         >
 
-          <div class="actionLeft">
+          <div class="cuteIcon">
+            🐹
+          </div>
 
-            <div class="actionIcon">
-              ◌
-            </div>
 
-            <div class="actionText">
+          <div class="cuteText">
 
-              <strong>
-                점심 · 저녁 공연 비교
-              </strong>
+            <strong>
+              누가 바닐라에서 더 잘했는가
+            </strong>
 
-              <span>
-                지정 20명 공연별 확인
-              </span>
-
-            </div>
+            <span>
+              김명훈 🆚 정우영 · 공연 예매 현황 비교
+            </span>
 
           </div>
 
-          <div class="arrow">
-            ›
+
+          <div class="cuteArrow">
+            ✨
           </div>
 
         </button>
 
 
+        <!-- 비교 닫기 -->
+
         <button
           id="compareCloseBtn"
-          class="action"
+          class="cuteCompareBtn"
           style="display:none"
         >
 
-          <div class="actionLeft">
+          <div class="cuteIcon">
+            🐹
+          </div>
 
-            <div class="actionIcon">
-              ×
-            </div>
 
-            <div class="actionText">
+          <div class="cuteText">
 
-              <strong>
-                비교 결과 닫기
-              </strong>
+            <strong>
+              비교 결과 닫기
+            </strong>
 
-              <span>
-                메인 화면으로 돌아가기
-              </span>
-
-            </div>
+            <span>
+              다시 메인 화면으로 돌아가기
+            </span>
 
           </div>
 
-          <div class="arrow">
-            ‹
+
+          <div class="cuteArrow">
+            ✕
           </div>
 
         </button>
@@ -1770,12 +1895,16 @@ button{
 
         </div>
 
+
       </div>
+
 
     </div>
 
 
-    <!-- 비교 결과 -->
+    <!-- =================================
+         비교 결과
+    ================================= -->
 
     <div
       id="compareBox"
@@ -1783,17 +1912,19 @@ button{
     ></div>
 
 
-    <!-- =========================
-         EPISODES
-    ========================== -->
+    <!-- =================================
+         회차별 현황
+    ================================= -->
 
     <section class="card episodeSection">
+
 
       <div class="episodeHeader">
 
         <div class="episodeTitle">
           회차별 예매 현황
         </div>
+
 
         <div class="episodeDesc">
           예매된 회차별 인원과 건수를 확인할 수 있습니다.
@@ -1807,6 +1938,7 @@ button{
         class="episodeGrid"
       ></div>
 
+
     </section>
 
 
@@ -1814,17 +1946,19 @@ button{
       YUJAK · RESERVATION SYSTEM
     </div>
 
+
   </section>
 
 
-  <!-- =========================
-       RESULT
-  ========================== -->
+  <!-- =================================
+       검색 결과
+  ================================= -->
 
   <section
     id="result"
     class="resultPage"
   >
+
 
     <button
       id="backBtn"
@@ -1836,22 +1970,27 @@ button{
 
     <div class="card resultCard">
 
+
       <div class="resultTop">
+
 
         <div
           id="resultName"
           class="resultName"
         ></div>
 
+
         <div
           id="summary"
           class="summary"
         ></div>
 
+
       </div>
 
 
       <div id="groups"></div>
+
 
     </div>
 
@@ -1861,24 +2000,27 @@ button{
       class="footer"
     ></div>
 
+
   </section>
+
 
 </div>
 
 
 <script>
 
-/* =========================
-   상태
-========================= */
+
+/* =================================
+   현재 검색 방식
+================================= */
 
 let searchType =
   'friend';
 
 
-/* =========================
-   DOM
-========================= */
+/* =================================
+   DOM helper
+================================= */
 
 const $ =
   selector =>
@@ -1887,9 +2029,9 @@ const $ =
     );
 
 
-/* =========================
-   Escape
-========================= */
+/* =================================
+   HTML escape
+================================= */
 
 function esc(value){
 
@@ -1910,46 +2052,61 @@ function esc(value){
 }
 
 
-/* =========================
-   날짜 포맷
-========================= */
+/* =================================
+   날짜 표시
+================================= */
 
 function fmt(value){
 
   if(!value){
+
     return '-';
+
   }
+
 
   const date =
     new Date(value);
+
 
   if(
     Number.isNaN(
       date.getTime()
     )
   ){
+
     return value;
+
   }
+
 
   return new Intl.DateTimeFormat(
     'ko-KR',
     {
+
       year:'numeric',
+
       month:'2-digit',
+
       day:'2-digit',
+
       hour:'2-digit',
+
       minute:'2-digit',
+
       hour12:false,
+
       timeZone:'Asia/Seoul'
+
     }
   ).format(date);
 
 }
 
 
-/* =========================
-   검색 방식 변경
-========================= */
+/* =================================
+   검색 방식 버튼
+================================= */
 
 document
   .querySelectorAll(
@@ -1957,9 +2114,11 @@ document
   )
   .forEach(button => {
 
+
     button.addEventListener(
       'click',
       () => {
+
 
         document
           .querySelectorAll(
@@ -1972,23 +2131,32 @@ document
               )
           );
 
+
         button.classList.add(
           'active'
         );
 
+
         searchType =
           button.dataset.type;
+
 
         $('#nameInput').value =
           '';
 
+
         $('#error').textContent =
           '';
 
+
         $('#nameInput').placeholder =
+
           searchType === 'friend'
+
             ? '배우 이름을 입력하세요'
+
             : '예매자 성함을 입력하세요';
+
 
       }
     );
@@ -1996,21 +2164,25 @@ document
   });
 
 
-/* =========================
-   전체 상태
-========================= */
+/* =================================
+   전체 현황 불러오기
+================================= */
 
 async function loadStatus(){
 
+
   try{
+
 
     const response =
       await fetch(
         '/api/status'
       );
 
+
     const data =
       await response.json();
+
 
     if(!response.ok){
 
@@ -2022,12 +2194,16 @@ async function loadStatus(){
 
 
     $('#allBookings').innerHTML =
+
       data.reservationCount +
+
       ' <small>건</small>';
 
 
     $('#allPeople').innerHTML =
+
       data.totalPeople +
+
       ' <small>명</small>';
 
 
@@ -2038,14 +2214,18 @@ async function loadStatus(){
 
 
     $('#dataDate').textContent =
+
       fmt(
         data.latestResponse
       ) +
+
       ' 기준';
 
 
     $('#status').textContent =
+
       '엑셀 마지막 응답 · ' +
+
       fmt(
         data.latestResponse
       );
@@ -2055,34 +2235,44 @@ async function loadStatus(){
       data.episodes || []
     );
 
+
   }catch(error){
+
 
     console.error(error);
 
+
     $('#status').textContent =
+
       '데이터를 불러오지 못했습니다.';
+
 
   }
 
 }
 
 
-/* =========================
-   회차 렌더링
-========================= */
+/* =================================
+   회차 표시
+================================= */
 
 function renderEpisodes(
   episodes
 ){
 
+
   const element =
     $('#episodes');
+
 
   if(!episodes.length){
 
     element.innerHTML =
+
       '<div class="empty">' +
+
       '등록된 공연 회차가 없습니다.' +
+
       '</div>';
 
     return;
@@ -2091,6 +2281,7 @@ function renderEpisodes(
 
 
   element.innerHTML =
+
     episodes
       .map(
         episode => `
@@ -2110,18 +2301,24 @@ function renderEpisodes(
             </div>
 
             <div class="episodeDate">
+
               ${episode.month}월
               ${episode.day}일
+
             </div>
 
             <div class="episodePeople">
+
               ◯
               ${episode.people}명
+
             </div>
 
             <div class="episodeBookings">
+
               ▤
               ${episode.bookings}건
+
             </div>
 
           </div>
@@ -2133,30 +2330,40 @@ function renderEpisodes(
 }
 
 
-/* =========================
+/* =================================
    검색
-========================= */
+================================= */
 
 async function search(
   forcedName = null
 ){
 
+
   const input =
     $('#nameInput');
 
+
   const name =
+
     forcedName !== null
+
       ? forcedName.trim()
+
       : input.value.trim();
+
 
   $('#error').textContent =
     '';
 
+
   if(!name){
 
     $('#error').textContent =
+
       searchType === 'friend'
+
         ? '배우 이름을 입력해주세요.'
+
         : '예매자 성함을 입력해주세요.';
 
     return;
@@ -2167,7 +2374,9 @@ async function search(
   const button =
     $('#searchBtn');
 
+
   button.disabled = true;
+
 
   button.textContent =
     '조회 중';
@@ -2175,16 +2384,23 @@ async function search(
 
   try{
 
+
     const response =
+
       await fetch(
+
         '/api/search?type=' +
+
         encodeURIComponent(
           searchType
         ) +
+
         '&name=' +
+
         encodeURIComponent(
           name
         )
+
       );
 
 
@@ -2195,8 +2411,11 @@ async function search(
     if(!response.ok){
 
       throw new Error(
+
         data.error ||
+
         '조회에 실패했습니다.'
+
       );
 
     }
@@ -2206,58 +2425,76 @@ async function search(
       data
     );
 
+
   }catch(error){
+
 
     $('#error').textContent =
       error.message;
 
+
   }finally{
+
 
     button.disabled = false;
 
+
     button.textContent =
       '검색';
+
 
   }
 
 }
 
 
-/* =========================
-   결과 렌더링
-========================= */
+/* =================================
+   검색 결과
+================================= */
 
 function renderResult(
   data
 ){
 
+
   $('#home').style.display =
     'none';
+
 
   $('#result').style.display =
     'block';
 
 
   const typeLabel =
+
     data.type === 'booker'
+
       ? '예매자'
+
       : '배우';
 
 
   $('#resultName').textContent =
+
     data.name +
+
     ' · ' +
+
     typeLabel +
+
     ' 검색 결과';
 
 
   $('#summary').innerHTML =
 
     '<strong>' +
+
     data.totalPeople +
+
     '명</strong><br>' +
 
     data.totalBookings +
+
     '건';
 
 
@@ -2270,14 +2507,19 @@ function renderResult(
     of data.reservations
   ){
 
+
     for(
       const slot
       of reservation.slots
     ){
 
+
       const dayKey =
+
         slot.month +
+
         '-' +
+
         slot.day;
 
 
@@ -2288,7 +2530,9 @@ function renderResult(
       ){
 
         days.set(
+
           dayKey,
+
           {
 
             month:
@@ -2301,6 +2545,7 @@ function renderResult(
               new Map()
 
           }
+
         );
 
       }
@@ -2319,7 +2564,9 @@ function renderResult(
       ){
 
         day.times.set(
+
           slot.key,
+
           {
 
             label:
@@ -2332,6 +2579,7 @@ function renderResult(
             rows:[]
 
           }
+
         );
 
       }
@@ -2345,9 +2593,11 @@ function renderResult(
 
       if(
         !time.rows.some(
+
           row =>
             row.id ===
             reservation.id
+
         )
       ){
 
@@ -2369,19 +2619,26 @@ function renderResult(
     const day
     of [...days.values()]
       .sort(
+
         (a,b) =>
+
           a.month - b.month ||
+
           a.day - b.day
+
       )
   ){
+
 
     html += `
 
       <section class="day">
 
         <h2>
+
           ${day.month}월
           ${day.day}일
+
         </h2>
 
     `;
@@ -2391,17 +2648,26 @@ function renderResult(
       const time
       of [...day.times.values()]
         .sort(
+
           (a,b) =>
+
             a.minutes -
             b.minutes
+
         )
     ){
 
+
       const people =
+
         time.rows.reduce(
+
           (sum,row) =>
+
             sum + row.count,
+
           0
+
         );
 
 
@@ -2409,41 +2675,62 @@ function renderResult(
 
         <div class="time">
 
+
           <div class="timeHead">
 
             <span class="timeLabel">
+
               ${esc(
                 time.label
               )}
+
             </span>
 
+
             <span class="timeMeta">
+
               ${time.rows.length}건
+
               ·
+
               ${people}명
+
             </span>
 
           </div>
 
+
           ${time.rows
+
             .map(
+
               row => `
 
                 <div class="person">
 
                   <span class="personName">
-                    ${esc(row.name)}
+
+                    ${esc(
+                      row.name
+                    )}
+
                   </span>
 
+
                   <span class="personCount">
+
                     ${row.count}명
+
                   </span>
 
                 </div>
 
               `
+
             )
+
             .join('')}
+
 
         </div>
 
@@ -2459,7 +2746,9 @@ function renderResult(
 
 
   $('#groups').innerHTML =
+
     html ||
+
     `
 
       <div class="empty">
@@ -2472,33 +2761,41 @@ function renderResult(
 
 
   $('#resultUpdated').textContent =
+
     '엑셀 마지막 응답 · ' +
+
     fmt(
       data.latestResponse
     ) +
+
     ' (KST)';
 
 }
 
 
-/* =========================
-   공연 비교
-========================= */
+/* =================================
+   김명훈 / 정우영 비교
+================================= */
 
 async function comparePerformances(){
+
 
   const box =
     $('#compareBox');
 
+
   const button =
     $('#compareBtn');
+
 
   button.disabled = true;
 
 
   try{
 
+
     const response =
+
       await fetch(
         '/api/compare-performances'
       );
@@ -2511,124 +2808,207 @@ async function comparePerformances(){
     if(!response.ok){
 
       throw new Error(
+
         data.error ||
+
         '집계에 실패했습니다.'
+
       );
 
     }
 
 
+    /* -------------------------
+       이름 목록
+    ------------------------- */
+
     const lunchNames =
+
       data.lunch.names
+
         .map(
+
           p =>
+
             esc(p.name) +
+
             ' ' +
+
             p.count +
+
             '명'
+
         )
+
         .join(', ') ||
+
       '없음';
 
 
     const dinnerNames =
+
       data.dinner.names
+
         .map(
+
           p =>
+
             esc(p.name) +
+
             ' ' +
+
             p.count +
+
             '명'
+
         )
+
         .join(', ') ||
+
       '없음';
 
 
     const both =
+
       data.both
+
         .map(
+
           name =>
             esc(name)
+
         )
+
         .join(', ') ||
+
       '없음';
 
 
+    /* -------------------------
+       결과 화면
+    ------------------------- */
+
     box.innerHTML = `
+
 
       <div class="cardHeading">
 
+
         <div class="cardTitle">
-          점심 · 저녁 공연 비교
+
+          누가 바닐라에서 더 잘했는가
+
         </div>
 
+
         <div class="cardSub">
-          지정 20명 기준
+
+          김명훈 🆚 정우영
+
         </div>
+
 
       </div>
 
 
       <div class="compareGrid">
 
+
+        <!-- 정우영 -->
+
         <div class="compareSide">
 
+
           <b>
-            정우영 · 점심 3회
+
+            ☀️ 정우영 · 점심 공연 3회
+
           </b>
 
+
           <div class="compareNum">
+
             ${data.lunch.people}명
+
           </div>
 
+
           <div class="compareNames">
+
             ${lunchNames}
+
           </div>
+
 
         </div>
 
+
+        <!-- 김명훈 -->
 
         <div class="compareSide">
 
+
           <b>
-            김명훈 · 저녁 3회
+
+            🌙 김명훈 · 저녁 공연 3회
+
           </b>
 
+
           <div class="compareNum">
+
             ${data.dinner.people}명
+
           </div>
+
 
           <div class="compareNames">
+
             ${dinnerNames}
+
           </div>
 
+
         </div>
+
 
       </div>
 
 
       <div class="compareBoth">
 
+
         <strong>
-          점심 + 저녁 모두 예매
+
+          🔄 점심 + 저녁 모두 예매
+
         </strong>
+
 
         <br>
 
+
         ${both}
+
 
       </div>
 
 
       <div class="compareNote">
 
-        지인 선택 값은 사용하지 않고
-        실제 예매 일자와 시간으로 분류합니다.
+        지정된 20명의 예매자를 기준으로
+        실제 예매 일자와 시간을 확인합니다.
+        지인 선택 값은 이 비교에 사용하지 않습니다.
 
       </div>
 
+
     `;
 
+
+    /* -------------------------
+       표시
+    ------------------------- */
 
     box.style.display =
       'block';
@@ -2642,17 +3022,48 @@ async function comparePerformances(){
       .style.display =
       'flex';
 
+
+    /* 비교 결과 위치로 이동 */
+
+    setTimeout(
+
+      () => {
+
+        box.scrollIntoView({
+
+          behavior:'smooth',
+
+          block:'start'
+
+        });
+
+      },
+
+      50
+
+    );
+
+
   }catch(error){
 
+
     box.innerHTML =
+
       '<div class="empty">' +
-      esc(error.message) +
+
+      esc(
+        error.message
+      ) +
+
       '</div>';
+
 
     box.style.display =
       'block';
 
+
   }finally{
+
 
     button.disabled = false;
 
@@ -2661,21 +3072,56 @@ async function comparePerformances(){
 }
 
 
-/* =========================
+/* =================================
+   비교 결과 닫기
+================================= */
+
+function closeComparison(){
+
+
+  $('#compareBox')
+    .style.display =
+    'none';
+
+
+  $('#compareBtn')
+    .style.display =
+    'flex';
+
+
+  $('#compareCloseBtn')
+    .style.display =
+    'none';
+
+}
+
+
+/* =================================
    검색 버튼
-========================= */
+================================= */
 
 $('#searchBtn')
   .addEventListener(
+
     'click',
-    () => search()
+
+    () =>
+      search()
+
   );
 
 
+/* =================================
+   Enter 검색
+================================= */
+
 $('#nameInput')
   .addEventListener(
+
     'keydown',
+
     event => {
+
 
       if(
         event.key === 'Enter'
@@ -2686,12 +3132,13 @@ $('#nameInput')
       }
 
     }
+
   );
 
 
-/* =========================
+/* =================================
    빠른 검색
-========================= */
+================================= */
 
 document
   .querySelectorAll(
@@ -2699,80 +3146,88 @@ document
   )
   .forEach(button => {
 
+
     button.addEventListener(
+
       'click',
+
       () => {
+
 
         const name =
           button.dataset.name;
 
+
         search(name);
 
       }
+
     );
 
   });
 
 
-/* =========================
+/* =================================
    비교 버튼
-========================= */
+================================= */
 
 $('#compareBtn')
   .addEventListener(
+
     'click',
+
     comparePerformances
+
   );
 
+
+/* =================================
+   비교 닫기
+================================= */
 
 $('#compareCloseBtn')
   .addEventListener(
+
     'click',
-    () => {
 
-      $('#compareBox')
-        .style.display =
-        'none';
+    closeComparison
 
-      $('#compareBtn')
-        .style.display =
-        'flex';
-
-      $('#compareCloseBtn')
-        .style.display =
-        'none';
-
-    }
   );
 
 
-/* =========================
+/* =================================
    뒤로가기
-========================= */
+================================= */
 
 $('#backBtn')
   .addEventListener(
+
     'click',
+
     () => {
+
 
       $('#result')
         .style.display =
         'none';
 
+
       $('#home')
         .style.display =
         'block';
+
 
       $('#nameInput')
         .focus();
 
     }
+
   );
 
 
-/* =========================
-   시작
-========================= */
+/* =================================
+   초기 실행
+================================= */
 
 loadStatus();
 
