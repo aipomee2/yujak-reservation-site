@@ -6,9 +6,12 @@ const path = require('path');
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
-const EXCEL_FILE = path.join(__dirname, 'data', 'reservations.xlsx');
+const EXCEL_FILE = path.join(
+  __dirname,
+  'data',
+  'reservations.xlsx'
+);
 
-// 검색 결과에서 제외할 이름
 const EXCLUDED_NAMES = new Set([
   '김맹훈',
   '정해진'
@@ -26,23 +29,29 @@ function num(v) {
   return m ? Number(m[0]) : 0;
 }
 
-// 엑셀 응답일시를 timestamp로 변환
 function responseTimestamp(v) {
-  // Date 객체
-  if (v instanceof Date && !Number.isNaN(v.getTime())) {
+
+  if (
+    v instanceof Date &&
+    !Number.isNaN(v.getTime())
+  ) {
     return v.getTime();
   }
 
-  // Excel serial date
-  if (typeof v === 'number' && Number.isFinite(v)) {
-    const ms = Math.round(
-      (v - 25569) * 86400 * 1000
-    );
+  if (
+    typeof v === 'number' &&
+    Number.isFinite(v)
+  ) {
+    const ms =
+      Math.round(
+        (v - 25569) *
+        86400 *
+        1000
+      );
 
-    return Number.isFinite(ms) ? ms : NaN;
+    return ms;
   }
 
-  // 문자열
   const s = text(v);
 
   if (!s) {
@@ -51,11 +60,15 @@ function responseTimestamp(v) {
 
   const t = Date.parse(s);
 
-  return Number.isNaN(t) ? NaN : t;
+  return Number.isNaN(t)
+    ? NaN
+    : t;
 }
 
 function responseDate(v) {
-  const ts = responseTimestamp(v);
+
+  const ts =
+    responseTimestamp(v);
 
   if (Number.isNaN(ts)) {
     return null;
@@ -64,11 +77,15 @@ function responseDate(v) {
   return new Date(ts).toISOString();
 }
 
-// 엑셀 컬럼 찾기
 function col(row, names) {
+
   for (const name of names) {
+
     if (
-      Object.prototype.hasOwnProperty.call(row, name)
+      Object.prototype.hasOwnProperty.call(
+        row,
+        name
+      )
     ) {
       return row[name];
     }
@@ -77,8 +94,8 @@ function col(row, names) {
   return '';
 }
 
-// 예매 날짜/시간 파싱
 function parseSlot(raw) {
+
   const s = text(raw);
 
   const m = s.match(
@@ -95,132 +112,151 @@ function parseSlot(raw) {
   const minute = Number(m[4]);
 
   return {
+
     month,
     day,
     hour,
     minute,
 
     key:
-      `${month}-${day}-${hour}:${String(minute).padStart(2, '0')}`,
+      `${month}-${day}-${hour}:${String(
+        minute
+      ).padStart(2, '0')}`,
 
     label:
-      `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+      `${String(hour).padStart(2, '0')}:${String(
+        minute
+      ).padStart(2, '0')}`
   };
 }
 
-// 엑셀 읽기
 function readExcel() {
+
   if (!fs.existsSync(EXCEL_FILE)) {
+
     throw new Error(
       'data/reservations.xlsx 파일을 찾을 수 없습니다.'
     );
   }
 
-  const workbook = XLSX.readFile(
-    EXCEL_FILE,
-    {
-      cellDates: true
-    }
-  );
-
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
-
-  const rows = XLSX.utils.sheet_to_json(
-    worksheet,
-    {
-      defval: ''
-    }
-  );
-
-  // =========================
-  // 예매 데이터
-  // =========================
-
-  const reservations = rows
-    .map((row, index) => {
-
-      const name = text(
-        col(row, [
-          '예매자 성함(*)',
-          '예매자 성함'
-        ])
-      );
-
-      const count = num(
-        col(row, [
-          '예매 인원(*)',
-          '예매 인원'
-        ])
-      );
-
-      const dateRaw = text(
-        col(row, [
-          '예매 일자(*)',
-          '예매 일자'
-        ])
-      );
-
-      const friendRaw = text(
-        col(row, [
-          '지인 선택',
-          '지인'
-        ])
-      );
-
-      const slots = dateRaw
-        .split('|')
-        .map(parseSlot)
-        .filter(Boolean);
-
-      const friends = friendRaw
-        .split('|')
-        .map(text)
-        .filter(Boolean);
-
-      return {
-        id: index + 2,
-        name,
-        count,
-        friends,
-        slots
-      };
-    })
-    .filter(r =>
-      r.name &&
-      r.count > 0 &&
-      r.slots.length &&
-      !EXCLUDED_NAMES.has(r.name)
-    );
-
-  // =========================
-  // 가장 최근 응답일시
-  // =========================
-
-  const parsedResponses = rows
-    .map(row => {
-
-      const raw = col(row, [
-        '응답일시'
-      ]);
-
-      const timestamp =
-        responseTimestamp(raw);
-
-      if (Number.isNaN(timestamp)) {
-        return null;
+  const workbook =
+    XLSX.readFile(
+      EXCEL_FILE,
+      {
+        cellDates: true
       }
-
-      return {
-        timestamp,
-        value: responseDate(raw)
-      };
-    })
-    .filter(Boolean)
-    .sort(
-      (a, b) =>
-        a.timestamp - b.timestamp
     );
+
+  const sheetName =
+    workbook.SheetNames[0];
+
+  const worksheet =
+    workbook.Sheets[sheetName];
+
+  const rows =
+    XLSX.utils.sheet_to_json(
+      worksheet,
+      {
+        defval: ''
+      }
+    );
+
+  const reservations =
+    rows
+      .map((row, index) => {
+
+        const name =
+          text(
+            col(row, [
+              '예매자 성함(*)',
+              '예매자 성함'
+            ])
+          );
+
+        const count =
+          num(
+            col(row, [
+              '예매 인원(*)',
+              '예매 인원'
+            ])
+          );
+
+        const dateRaw =
+          text(
+            col(row, [
+              '예매 일자(*)',
+              '예매 일자'
+            ])
+          );
+
+        const friendRaw =
+          text(
+            col(row, [
+              '지인 선택',
+              '지인'
+            ])
+          );
+
+        const slots =
+          dateRaw
+            .split('|')
+            .map(parseSlot)
+            .filter(Boolean);
+
+        const friends =
+          friendRaw
+            .split('|')
+            .map(text)
+            .filter(Boolean);
+
+        return {
+
+          id: index + 2,
+
+          name,
+
+          count,
+
+          friends,
+
+          slots
+        };
+      })
+      .filter(r =>
+        r.name &&
+        r.count > 0 &&
+        r.slots.length &&
+        !EXCLUDED_NAMES.has(r.name)
+      );
+
+  const parsedResponses =
+    rows
+      .map(row => {
+
+        const raw =
+          col(row, [
+            '응답일시'
+          ]);
+
+        const timestamp =
+          responseTimestamp(raw);
+
+        if (Number.isNaN(timestamp)) {
+          return null;
+        }
+
+        return {
+          timestamp,
+          value:
+            responseDate(raw)
+        };
+      })
+      .filter(Boolean)
+      .sort(
+        (a, b) =>
+          a.timestamp -
+          b.timestamp
+      );
 
   const latestResponse =
     parsedResponses.length
@@ -229,27 +265,37 @@ function readExcel() {
         ].value
       : null;
 
-  // =========================
-  // 회차별 예매 현황
-  // =========================
+  const episodeMap =
+    new Map();
 
-  const episodeMap = new Map();
+  for (
+    const reservation
+    of reservations
+  ) {
 
-  for (const reservation of reservations) {
+    for (
+      const slot
+      of reservation.slots
+    ) {
 
-    for (const slot of reservation.slots) {
-
-      if (!episodeMap.has(slot.key)) {
+      if (
+        !episodeMap.has(
+          slot.key
+        )
+      ) {
 
         episodeMap.set(
           slot.key,
           {
+
             key: slot.key,
 
             month: slot.month,
+
             day: slot.day,
 
             hour: slot.hour,
+
             minute: slot.minute,
 
             label:
@@ -257,13 +303,16 @@ function readExcel() {
               `${slot.label}`,
 
             people: 0,
+
             bookings: 0
           }
         );
       }
 
       const episode =
-        episodeMap.get(slot.key);
+        episodeMap.get(
+          slot.key
+        );
 
       episode.people +=
         reservation.count;
@@ -272,72 +321,76 @@ function readExcel() {
     }
   }
 
-  // 날짜/시간 순서대로 정렬
   const episodes =
     [...episodeMap.values()]
-      .sort((a, b) => {
-
-        return (
-          (a.month - b.month) ||
-          (a.day - b.day) ||
-          (a.hour - b.hour) ||
-          (a.minute - b.minute)
-        );
-      })
+      .sort((a, b) =>
+        (a.month - b.month) ||
+        (a.day - b.day) ||
+        (a.hour - b.hour) ||
+        (a.minute - b.minute)
+      )
       .map((episode, index) => ({
         episode: index + 1,
         ...episode
       }));
 
-  // 엑셀 파일 자체의 수정 시간
   const fileMtime =
     fs.statSync(EXCEL_FILE)
       .mtime
       .toISOString();
 
   return {
+
     reservations,
+
     latestResponse,
+
     fileMtime,
-    sourceRows: rows.length,
+
+    sourceRows:
+      rows.length,
+
     episodes
   };
 }
 
-// =========================
-// 기본 설정
-// =========================
+/* =========================
+   기본 설정
+========================= */
 
-app.disable('x-powered-by');
+app.disable(
+  'x-powered-by'
+);
 
-app.use((req, res, next) => {
+app.use(
+  (req, res, next) => {
 
-  res.setHeader(
-    'X-Content-Type-Options',
-    'nosniff'
-  );
+    res.setHeader(
+      'X-Content-Type-Options',
+      'nosniff'
+    );
 
-  res.setHeader(
-    'Referrer-Policy',
-    'same-origin'
-  );
+    res.setHeader(
+      'Referrer-Policy',
+      'same-origin'
+    );
 
-  next();
-});
+    next();
+  }
+);
 
-// public 폴더
 app.use(
   express.static(
-    path.join(__dirname, 'public'),
-    {
-      extensions: ['html']
-    }
+    path.join(
+      __dirname,
+      'public'
+    )
   )
 );
 
-// =========================
-// 서버 상태 확인
-// =========================
+/* =========================
+   Health
+========================= */
 
 app.get(
   '/health',
@@ -349,9 +402,9 @@ app.get(
   }
 );
 
-// =========================
-// 전체 예매 현황
-// =========================
+/* =========================
+   전체 현황
+========================= */
 
 app.get(
   '/api/status',
@@ -359,7 +412,8 @@ app.get(
 
     try {
 
-      const data = readExcel();
+      const data =
+        readExcel();
 
       const totalPeople =
         data.reservations.reduce(
@@ -396,9 +450,15 @@ app.get(
   }
 );
 
-// =========================
-// 배우 이름 검색
-// =========================
+/* =========================
+   검색
+
+   type=friend
+   → 지인 성함 검색
+
+   type=booker
+   → 예매자 성함 검색
+========================= */
 
 app.get(
   '/api/search',
@@ -409,43 +469,90 @@ app.get(
       const q =
         text(req.query.name);
 
-      if (!q || q.length > 50) {
+      const type =
+        text(req.query.type) ||
+        'friend';
+
+      if (!q) {
 
         return res.status(400).json({
           error:
-            '배우 이름을 입력해주세요.'
+            '검색어를 입력해주세요.'
+        });
+      }
+
+      if (q.length > 50) {
+
+        return res.status(400).json({
+          error:
+            '검색어가 너무 깁니다.'
         });
       }
 
       const data =
         readExcel();
 
-      const matches =
-        data.reservations
-          .filter(reservation =>
-            reservation.friends.includes(q)
+      let matches;
+
+      /* =========================
+         지인 이름 검색
+      ========================= */
+
+      if (type === 'friend') {
+
+        matches =
+          data.reservations
+            .filter(
+              reservation =>
+                reservation.friends.includes(q)
+            );
+
+      }
+
+      /* =========================
+         예매자 이름 검색
+      ========================= */
+
+      else if (type === 'booker') {
+
+        matches =
+          data.reservations
+            .filter(
+              reservation =>
+                reservation.name === q
+            );
+
+      }
+
+      else {
+
+        return res.status(400).json({
+          error:
+            '잘못된 검색 방식입니다.'
+        });
+      }
+
+      matches.sort(
+        (a, b) => {
+
+          const A =
+            a.slots[0] || {};
+
+          const B =
+            b.slots[0] || {};
+
+          return (
+            (A.month - B.month) ||
+            (A.day - B.day) ||
+            (A.hour - B.hour) ||
+            (A.minute - B.minute) ||
+            a.name.localeCompare(
+              b.name,
+              'ko'
+            )
           );
-
-      // 날짜/시간 순 정렬
-      matches.sort((a, b) => {
-
-        const A =
-          a.slots[0] || {};
-
-        const B =
-          b.slots[0] || {};
-
-        return (
-          (A.month - B.month) ||
-          (A.day - B.day) ||
-          (A.hour - B.hour) ||
-          (A.minute - B.minute) ||
-          a.name.localeCompare(
-            b.name,
-            'ko'
-          )
-        );
-      });
+        }
+      );
 
       const totalPeople =
         matches.reduce(
@@ -458,18 +565,34 @@ app.get(
 
         name: q,
 
+        type,
+
         totalBookings:
           matches.length,
 
         totalPeople,
 
         reservations:
-          matches.map(reservation => ({
-            id: reservation.id,
-            name: reservation.name,
-            count: reservation.count,
-            slots: reservation.slots
-          })),
+          matches.map(
+            reservation => ({
+
+              id:
+                reservation.id,
+
+              name:
+                reservation.name,
+
+              count:
+                reservation.count,
+
+              friends:
+                reservation.friends,
+
+              slots:
+                reservation.slots
+
+            })
+          ),
 
         latestResponse:
           data.latestResponse,
@@ -489,16 +612,170 @@ app.get(
   }
 );
 
-// =========================
-// 마지막 fallback
-// =========================
-// Express 5에서도 문제가 생기지 않도록
-// app.get('*') 대신 app.use 사용
+/* =========================
+   점심 / 저녁 비교
+========================= */
+
+app.get(
+  '/api/compare-performances',
+  (req, res) => {
+
+    try {
+
+      const data =
+        readExcel();
+
+      const targetNames =
+        new Set([
+
+          '이희성',
+          '이유민',
+          '서태원',
+          '유정수',
+          '권오성',
+          '김현지',
+          '이종현',
+          '정우영',
+          '이예림',
+          '윤강보',
+          '김명훈',
+          '정해령',
+          '이슬아',
+          '김여림',
+          '서채림',
+          '김준희',
+          '강태희',
+          '박경희',
+          '김재현',
+          '백경환'
+
+        ]);
+
+      const result = {
+
+        lunch: {
+          bookings: 0,
+          people: 0,
+          names: []
+        },
+
+        dinner: {
+          bookings: 0,
+          people: 0,
+          names: []
+        },
+
+        both: []
+      };
+
+      for (
+        const reservation
+        of data.reservations
+      ) {
+
+        if (
+          !targetNames.has(
+            reservation.name
+          )
+        ) {
+          continue;
+        }
+
+        const lunchSlots =
+          reservation.slots.filter(
+            slot =>
+              slot.hour >= 11 &&
+              slot.hour < 16
+          );
+
+        const dinnerSlots =
+          reservation.slots.filter(
+            slot =>
+              slot.hour >= 17 &&
+              slot.hour < 22
+          );
+
+        if (
+          lunchSlots.length
+        ) {
+
+          result.lunch.bookings++;
+
+          result.lunch.people +=
+            reservation.count;
+
+          result.lunch.names.push({
+
+            name:
+              reservation.name,
+
+            count:
+              reservation.count,
+
+            slots:
+              lunchSlots
+
+          });
+        }
+
+        if (
+          dinnerSlots.length
+        ) {
+
+          result.dinner.bookings++;
+
+          result.dinner.people +=
+            reservation.count;
+
+          result.dinner.names.push({
+
+            name:
+              reservation.name,
+
+            count:
+              reservation.count,
+
+            slots:
+              dinnerSlots
+
+          });
+        }
+
+        if (
+          lunchSlots.length &&
+          dinnerSlots.length
+        ) {
+
+          result.both.push(
+            reservation.name
+          );
+        }
+      }
+
+      res.json(result);
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        error:
+          error.message
+      });
+    }
+  }
+);
+
+/* =========================
+   SPA fallback
+========================= */
 
 app.use(
   (req, res, next) => {
 
-    if (req.method !== 'GET') {
+    if (
+      req.method !== 'GET'
+    ) {
       return next();
     }
 
@@ -512,9 +789,9 @@ app.use(
   }
 );
 
-// =========================
-// 서버 시작
-// =========================
+/* =========================
+   서버 실행
+========================= */
 
 app.listen(
   PORT,
@@ -524,5 +801,6 @@ app.listen(
     console.log(
       `Yujak site listening on ${PORT}`
     );
+
   }
 );
