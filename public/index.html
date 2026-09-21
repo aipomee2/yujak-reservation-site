@@ -1,2983 +1,1803 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
-<meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
->
-
-<meta
-  name="theme-color"
-  content="#f4f1ec"
->
-
-<title>유작 · 예매 현황</title>
-
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700;800&display=swap');
-
-
-:root{
-
-  --bg:#f3f0eb;
-
-  --paper:#fffdf9;
-
-  --ink:#27231f;
-
-  --muted:#817b73;
-
-  --line:#e5e0d8;
-
-  --soft:#f7f4ef;
-
-  --shadow:
-    0 18px 55px rgba(37,31,25,.08);
-
-}
-
-
-*{
-  box-sizing:border-box;
-}
-
-
-html{
-  background:var(--bg);
-}
-
-
-body{
-
-  margin:0;
-
-  color:var(--ink);
-
-  font-family:
-    Pretendard,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Noto Sans KR",
-    sans-serif;
-
-  -webkit-font-smoothing:antialiased;
-
-}
-
-
-.wrap{
-
-  width:min(
-    920px,
-    calc(100% - 24px)
-  );
-
-  margin:auto;
-
-  padding:
-    18px
-    0
-    60px;
-
-}
-
-
-.topbar{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:
-    0
-    3px
-    14px;
-
-  color:#77716a;
-
-  font-size:10px;
-
-}
-
-
-.brand{
-
-  font:
-    600 22px/1
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.13em;
-
-}
-
-
-.date{
-
-  letter-spacing:.08em;
-
-}
-
-
-.card{
-
-  background:
-    rgba(255,253,249,.97);
-
-  border:
-    1px solid rgba(50,45,40,.07);
-
-  border-radius:24px;
-
-  box-shadow:var(--shadow);
-
-}
-
-
-/* 포스터 */
-
-.posterStage{
-
-  position:relative;
-
-  padding:
-    8px
-    0
-    16px;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  min-height:300px;
-
-  margin-bottom:10px;
-
-  overflow:hidden;
-
-  border-radius:30px;
-
-  background:
-
-    radial-gradient(
-      circle at 18% 25%,
-      rgba(255,255,255,.95) 0 2px,
-      transparent 3px
-    ),
-
-    radial-gradient(
-      circle at 82% 70%,
-      rgba(255,255,255,.9) 0 2px,
-      transparent 3px
-    ),
-
-    linear-gradient(
-      135deg,
-      #eee9e2,
-      #f8f5ef 48%,
-      #ebe5dc
-    );
-
-  box-shadow:var(--shadow);
-
-}
-
-
-.poster{
-
-  width:min(
-    620px,
-    78%
-  );
-
-  overflow:hidden;
-
-  border-radius:24px;
-
-  position:relative;
-
-  z-index:2;
-
-}
-
-
-.poster img{
-
-  display:block;
-
-  width:100%;
-
-  height:auto;
-
-}
-
-
-.deco{
-
-  position:absolute;
-
-  color:#b8afa4;
-
-  z-index:1;
-
-  pointer-events:none;
-
-}
-
-
-.decoA{
-
-  left:9%;
-
-  top:18%;
-
-  font-size:34px;
-
-  opacity:.55;
-
-}
-
-
-.decoB{
-
-  right:8%;
-
-  top:25%;
-
-  font-size:17px;
-
-  letter-spacing:8px;
-
-  opacity:.5;
-
-}
-
-
-.decoC{
-
-  left:7%;
-
-  bottom:16%;
-
-  font-size:9px;
-
-  letter-spacing:.28em;
-
-  writing-mode:vertical-rl;
-
-  opacity:.65;
-
-}
-
-
-/* 검색 */
-
-.search{
-
-  padding:24px;
-
-}
-
-
-.eyebrow{
-
-  font-size:9px;
-
-  font-weight:800;
-
-  letter-spacing:.2em;
-
-  color:#9a938b;
-
-}
-
-
-.title{
-
-  font:
-    600 24px/1.35
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.07em;
-
-  margin:
-    7px
-    0
-    6px;
-
-}
-
-
-.desc{
-
-  font-size:11px;
-
-  color:var(--muted);
-
-  line-height:1.7;
-
-  margin-bottom:15px;
-
-}
-
-
-.searchTabs{
-
-  display:flex;
-
-  gap:6px;
-
-  margin-bottom:10px;
-
-}
-
-
-.searchTab{
-
-  flex:1;
-
-  height:40px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:12px;
-
-  background:#f7f4ef;
-
-  color:#8c857d;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-}
-
-
-.searchTab.active{
-
-  background:#292724;
-
-  color:#fff;
-
-  border-color:#292724;
-
-}
-
-
-.row{
-
-  display:flex;
-
-  gap:8px;
-
-}
-
-
-.input{
-
-  height:52px;
-
-  flex:1;
-
-  min-width:0;
-
-  border:
-    1px solid
-    #ddd7cf;
-
-  border-radius:15px;
-
-  padding:
-    0
-    16px;
-
-  background:#fbf9f5;
-
-  outline:0;
-
-  font-size:14px;
-
-}
-
-
-.input:focus{
-
-  background:#fff;
-
-  border-color:#9b9389;
-
-  box-shadow:
-    0 0 0 4px #f0ece6;
-
-}
-
-
-.btn{
-
-  height:52px;
-
-  border:0;
-
-  border-radius:15px;
-
-  background:#292724;
-
-  color:#fff;
-
-  font-size:12px;
-
-  font-weight:800;
-
-  padding:
-    0
-    23px;
-
-  cursor:pointer;
-
-}
-
-
-.btn:disabled{
-  opacity:.5;
-}
-
-
-.meta{
-
-  margin-top:8px;
-
-  color:#aaa39b;
-
-  font-size:9px;
-
-}
-
-
-.error{
-
-  min-height:16px;
-
-  color:#a33a32;
-
-  font-size:10px;
-
-  margin-top:6px;
-
-}
-
-
-.privacy{
-
-  text-align:center;
-
-  color:#9a938b;
-
-  font-size:9px;
-
-  line-height:1.7;
-
-  margin:
-    11px
-    5px;
-
-}
-
-
-/* 지인 미선택 */
-
-.otherLink{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  width:100%;
-
-  margin-top:10px;
-
-  padding:
-    15px
-    16px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:17px;
-
-  background:#fffdf9;
-
-  color:var(--ink);
-
-  cursor:pointer;
-
-  text-align:left;
-
-  box-shadow:
-    0 8px 25px
-    rgba(37,31,25,.04);
-
-}
-
-
-.otherText{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:4px;
-
-}
-
-
-.otherLink strong{
-  font-size:12px;
-}
-
-
-.otherLink span{
-  font-size:9px;
-  color:var(--muted);
-}
-
-
-.otherLink .arrow{
-
-  font-size:18px;
-
-  color:#9a938b;
-
-}
-
-
-/* 통계 */
-
-.stats{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr
-    1.4fr;
-
-  gap:10px;
-
-  margin-top:14px;
-
-}
-
-
-.stat{
-
-  padding:18px;
-
-}
-
-
-.label{
-
-  font-size:9px;
-
-  color:#8b847c;
-
-  margin-bottom:6px;
-
-}
-
-
-.value{
-
-  font:
-    600 23px
-    "Noto Serif KR",
-    serif;
-
-}
-
-
-.value small{
-
-  font:
-    11px
-    Pretendard,
-    sans-serif;
-
-  color:#77716a;
-
-}
-
-
-.update{
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.6;
-
-}
-
-
-.update strong{
-
-  display:block;
-
-  color:var(--ink);
-
-  font-size:11px;
-
-}
-
-
-/* 회차 */
-
-.episodeGrid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:10px;
-
-  margin-top:10px;
-
-}
-
-
-.episode{
-
-  padding:
-    15px
-    16px;
-
-}
-
-
-.episodeTop{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin-bottom:7px;
-
-}
-
-
-.episodeNo{
-
-  font-size:9px;
-
-  font-weight:800;
-
-  letter-spacing:.12em;
-
-  color:#9a938b;
-
-}
-
-
-.episodePeople{
-
-  font:
-    600 22px
-    "Noto Serif KR",
-    serif;
-
-}
-
-
-.episodePeople small{
-
-  font:
-    11px
-    Pretendard,
-    sans-serif;
-
-  color:#77716a;
-
-}
-
-
-.episodeDate{
-
-  font-size:9px;
-
-  color:#77716a;
-
-}
-
-
-.episodeBookings{
-
-  font-size:9px;
-
-  color:#aaa39b;
-
-  margin-top:4px;
-
-}
-
-
-/* 지인 미선택 결과 */
-
-.otherResult{
-
-  margin-top:22px;
-
-  padding:22px;
-
-}
-
-
-.otherHeader{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:end;
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  padding:
-    0
-    2px
-    16px;
-
-}
-
-
-.otherTitle{
-
-  font:
-    600 21px
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.06em;
-
-}
-
-
-.otherSummary{
-
-  text-align:right;
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.6;
-
-}
-
-
-.otherSummary strong{
-
-  font:
-    600 19px
-    "Noto Serif KR",
-    serif;
-
-  color:var(--ink);
-
-}
-
-
-.otherRow{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:
-    14px
-    4px;
-
-  border-bottom:
-    1px solid
-    #f0ede8;
-
-}
-
-
-.otherRow:last-child{
-  border-bottom:0;
-}
-
-
-.otherName{
-
-  font-size:12px;
-
-  font-weight:700;
-
-}
-
-
-.otherMeta{
-
-  font-size:10px;
-
-  color:#77716a;
-
-  text-align:right;
-
-}
-
-
-.otherSlot{
-
-  display:block;
-
-  font-size:9px;
-
-  color:#aaa39b;
-
-  margin-top:3px;
-
-}
-
-
-/* 검색 결과 */
-
-.result{
-
-  margin-top:22px;
-
-  padding:22px;
-
-}
-
-
-.resultTop{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:end;
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  padding:
-    0
-    2px
-    16px;
-
-}
-
-
-.resultName{
-
-  font:
-    600 22px
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.06em;
-
-}
-
-
-.summary{
-
-  text-align:right;
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.6;
-
-}
-
-
-.summary strong{
-
-  font:
-    600 19px
-    "Noto Serif KR",
-    serif;
-
-  color:var(--ink);
-
-}
-
-
-.day{
-
-  padding-top:20px;
-
-}
-
-
-.day h2{
-
-  font:
-    600 16px
-    "Noto Serif KR",
-    serif;
-
-  margin:
-    0
-    0
-    9px;
-
-}
-
-
-.time{
-
-  overflow:hidden;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:17px;
-
-  background:#fff;
-
-  margin:
-    8px
-    0;
-
-}
-
-
-.timeHead{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:
-    13px
-    15px;
-
-  background:var(--soft);
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-}
-
-
-.timeLabel{
-
-  font-size:13px;
-
-  font-weight:800;
-
-}
-
-
-.timeMeta{
-
-  font-size:9px;
-
-  color:#858079;
-
-}
-
-
-.person{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:
-    12px
-    15px;
-
-  border-bottom:
-    1px solid
-    #f0ede8;
-
-}
-
-
-.person:last-child{
-  border-bottom:0;
-}
-
-
-.personName{
-
-  font-size:12px;
-
-  font-weight:700;
-
-}
-
-
-.personCount{
-
-  font-size:10px;
-
-  color:#77716b;
-
-}
-
-
-/* 귀여운 비교 버튼 */
-
-.cuteCompareBtn{
-
-  width:100%;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:13px;
-
-  margin-top:14px;
-
-  padding:
-    14px
-    16px;
-
-  border:
-    1px solid
-    #e2dcd4;
-
-  border-radius:19px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #fffdf9,
-      #f8f3ed
-    );
-
-  color:var(--ink);
-
-  cursor:pointer;
-
-  text-align:left;
-
-  box-shadow:
-    0 10px 28px
-    rgba(37,31,25,.05);
-
-  transition:
-    all .18s ease;
-
-}
-
-
-.cuteCompareBtn:hover{
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 14px 34px
-    rgba(37,31,25,.09);
-
-}
-
-
-.cuteCompareBtn:disabled{
-
-  opacity:.6;
-
-  cursor:wait;
-
-}
-
-
-.cuteIcon{
-
-  width:42px;
-
-  height:42px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:14px;
-
-  background:#eee8df;
-
-  font-size:22px;
-
-  flex-shrink:0;
-
-}
-
-
-.cuteText{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:4px;
-
-  flex:1;
-
-}
-
-
-.cuteText strong{
-
-  font-size:12px;
-
-}
-
-
-.cuteText span{
-
-  color:#8a837b;
-
-  font-size:9px;
-
-}
-
-
-.cuteArrow{
-
-  font-size:17px;
-
-  color:#9a938b;
-
-}
-
-
-/* 비교 결과 */
-
-.compareBox{
-
-  display:none;
-
-  margin-top:14px;
-
-  padding:22px;
-
-}
-
-
-.cardHeading{
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  padding-bottom:16px;
-
-  margin-bottom:16px;
-
-}
-
-
-.cardTitle{
-
-  font:
-    600 21px
-    "Noto Serif KR",
-    serif;
-
-  letter-spacing:-.06em;
-
-}
-
-
-.cardSub{
-
-  margin-top:5px;
-
-  font-size:10px;
-
-  color:#77716a;
-
-}
-
-
-.compareGrid{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:10px;
-
-}
-
-
-.compareSide{
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:18px;
-
-  background:#fff;
-
-  padding:17px;
-
-}
-
-
-.compareSide b{
-
-  font-size:11px;
-
-}
-
-
-.compareNum{
-
-  font:
-    600 29px
-    "Noto Serif KR",
-    serif;
-
-  margin:
-    10px
-    0
-    6px;
-
-}
-
-
-.compareNames{
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.8;
-
-}
-
-
-.compareBoth{
-
-  margin-top:10px;
-
-  padding:
-    14px
-    16px;
-
-  border-radius:15px;
-
-  background:var(--soft);
-
-  font-size:10px;
-
-  color:#77716a;
-
-  line-height:1.8;
-
-}
-
-
-.compareBoth strong{
-  color:var(--ink);
-}
-
-
-.compareNote{
-
-  margin-top:12px;
-
-  font-size:9px;
-
-  line-height:1.7;
-
-  color:#aaa39b;
-
-}
-
-
-.empty{
-
-  text-align:center;
-
-  padding:46px 10px;
-
-  color:#777;
-
-  font-size:12px;
-
-}
-
-
-.back{
-
-  border:0;
-
-  background:transparent;
-
-  color:#777;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  padding:0;
-
-  margin:
-    0
-    0
-    13px;
-
-  cursor:pointer;
-
-}
-
-
-footer{
-
-  text-align:center;
-
-  color:#aaa39b;
-
-  font-size:9px;
-
-  margin-top:18px;
-
-}
-
-
-/* 모바일 */
-
-@media(max-width:650px){
-
-  .wrap{
-
-    width:
-      calc(100% - 14px);
-
-    padding-top:10px;
-
-  }
-
-
-  .topbar{
-
-    padding-bottom:10px;
-
-  }
-
-
-  .posterStage{
-
-    min-height:240px;
-
-    border-radius:24px;
-
-  }
-
-
-  .poster{
-
-    width:84%;
-
-    border-radius:20px;
-
-  }
-
-
-  .decoA{
-
-    left:4%;
-
-    top:16%;
-
-  }
-
-
-  .decoB{
-
-    right:3%;
-
-    top:22%;
-
-  }
-
-
-  .decoC{
-
-    left:4%;
-
-    bottom:13%;
-
-  }
-
-
-  .search{
-
-    padding:19px;
-
-  }
-
-
-  .title{
-
-    font-size:21px;
-
-  }
-
-
-  .stats{
-
-    grid-template-columns:
-      1fr
-      1fr;
-
-  }
-
-
-  .stat:last-child{
-
-    grid-column:
-      1 / -1;
-
-  }
-
-
-  .stat{
-
-    padding:15px;
-
-  }
-
-
-  .value{
-
-    font-size:21px;
-
-  }
-
-
-  .result{
-
-    padding:
-      17px
-      13px;
-
-    border-radius:21px;
-
-  }
-
-
-  .resultTop{
-
-    align-items:flex-start;
-
-    flex-direction:column;
-
-    gap:5px;
-
-  }
-
-
-  .summary{
-
-    text-align:left;
-
-  }
-
-
-  .row .btn{
-
-    padding:
-      0
-      18px;
-
-  }
-
-
-  .episodeGrid{
-
-    grid-template-columns:
-      1fr
-      1fr;
-
-  }
-
-
-  .episode{
-
-    padding:14px;
-
-  }
-
-
-  .compareGrid{
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-
-  .otherHeader{
-
-    align-items:flex-start;
-
-    flex-direction:column;
-
-    gap:8px;
-
-  }
-
-
-  .otherSummary{
-
-    text-align:left;
-
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>유작 예매 현황</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f6f8;
+      color: #222;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans KR",
+        sans-serif;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 70px;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .header p {
+      margin: 10px 0 0;
+      color: #777;
+      font-size: 15px;
+    }
+
+    /* =========================
+       POSTER + CAST
+    ========================= */
+
+    .visual-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .visual-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      overflow: hidden;
+    }
+
+    .visual-title {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .poster-image {
+      display: block;
+      width: 100%;
+      max-height: 650px;
+      object-fit: contain;
+      border-radius: 15px;
+      background: #f4f4f4;
+    }
+
+    .group-image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-title {
+      font-size: 21px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .card-subtitle {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: #f7f7f8;
+      border-radius: 16px;
+      padding: 20px 12px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .update-time {
+      text-align: right;
+      color: #999;
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    /* =========================
+       EPISODES
+    ========================= */
+
+    .episodes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .episode {
+      background: #f7f7f8;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .episode-info {
+      min-width: 0;
+    }
+
+    .episode-title {
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .episode-time {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .episode-count {
+      flex-shrink: 0;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .search-tab {
+      flex: 1;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      background: #f1f2f4;
+      color: #777;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .search-tab.active {
+      background: #222;
+      color: #fff;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #ddd;
+      border-radius: 13px;
+      padding: 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: #888;
+    }
+
+    .search-btn {
+      border: none;
+      border-radius: 13px;
+      padding: 0 22px;
+      background: #222;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .search-help {
+      color: #999;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    .result {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-summary {
+      background: #f7f7f8;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .result-summary strong {
+      font-size: 25px;
+    }
+
+    .reservation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .reservation {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .reservation-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .reservation-name {
+      font-weight: 900;
+    }
+
+    .reservation-count {
+      font-weight: 900;
+    }
+
+    .reservation-slots {
+      color: #777;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       OTHER BUTTON
+    ========================= */
+
+    .other-button {
+      width: 100%;
+      border: 1px solid #e5e5e5;
+      background: #fff;
+      border-radius: 16px;
+      padding: 17px;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.2s;
+    }
+
+    .other-button:hover {
+      background: #fafafa;
+    }
+
+    .other-button-title {
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .other-button-sub {
+      color: #888;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .other-result {
+      display: none;
+      margin-top: 15px;
+    }
+
+    .other-result.show {
+      display: block;
+    }
+
+    .other-summary {
+      background: #f7f7f8;
+      border-radius: 15px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .other-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .other-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 14px;
+      background: #fafafa;
+      border-radius: 12px;
+    }
+
+    .other-name {
+      font-weight: 800;
+    }
+
+    .other-detail {
+      color: #888;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    /* =========================
+       CUTE COMPARISON
+    ========================= */
+
+    .compare-trigger {
+      width: 100%;
+      border: none;
+      background: linear-gradient(
+        135deg,
+        #fff5f8,
+        #f6f2ff
+      );
+      border-radius: 20px;
+      padding: 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    .compare-trigger:hover {
+      transform: translateY(-2px);
+    }
+
+    .hamster {
+      font-size: 35px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .compare-trigger-title {
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .compare-trigger-sub {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .compare-box {
+      display: none;
+      margin-top: 18px;
+      border-radius: 20px;
+      background: #fafafa;
+      padding: 20px;
+    }
+
+    .compare-box.show {
+      display: block;
+    }
+
+    .compare-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .compare-header h2 {
+      margin: 0;
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .compare-header p {
+      color: #888;
+      font-size: 12px;
+      margin: 7px 0 0;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .compare-side {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+
+    .compare-side-title {
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .compare-number {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .compare-unit {
+      color: #888;
+      font-size: 12px;
+      margin-top: 7px;
+    }
+
+    .compare-names {
+      margin-top: 18px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .compare-name {
+      background: #f7f7f8;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .compare-close {
+      display: block;
+      margin: 15px auto 0;
+      border: none;
+      background: #eee;
+      border-radius: 12px;
+      padding: 10px 18px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .compare-note {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      margin-top: 15px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      line-height: 1.7;
+      margin-top: 30px;
+    }
+
+    /* =========================
+       EMPTY / ERROR
+    ========================= */
+
+    .empty {
+      padding: 30px 15px;
+      text-align: center;
+      color: #999;
+    }
+
+    .error {
+      padding: 20px;
+      background: #fff2f2;
+      color: #c33;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 20px, 1100px);
+        padding-top: 25px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .visual-section {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .visual-card {
+        border-radius: 18px;
+        padding: 12px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats .stat:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .episodes {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 18px;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      .search-btn {
+        padding: 13px;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .other-row {
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+<div class="container">
 
-<main class="wrap">
+  <!-- =========================
+       HEADER
+  ========================= -->
 
+  <header class="header">
+    <h1>🎭 유작 예매 현황</h1>
+    <p>공연 예매 현황을 한눈에 확인해보세요.</p>
+  </header>
 
-<!-- 상단 -->
 
-<div class="topbar">
+  <!-- =========================
+       POSTER + CAST
+  ========================= -->
 
-  <div class="brand">
-    유작
-  </div>
+  <section class="visual-section">
 
-  <div class="date">
-    2026 · RESERVATION
-  </div>
+    <div class="visual-card">
+      <div class="visual-title">
+        🎭 공연 포스터
+      </div>
 
-</div>
-
-
-<!-- 포스터 -->
-
-<div class="posterStage">
-
-  <div class="deco decoA">
-    ✦
-  </div>
-
-  <div class="deco decoB">
-    · · ·
-  </div>
-
-  <div class="deco decoC">
-    YUJAK
-  </div>
-
-  <div class="poster">
-
-    <img
-      src="/poster.png"
-      alt="유작 공연 포스터"
-    >
-
-  </div>
-
-</div>
-
-
-<section id="home">
-
-
-<!-- 검색 -->
-
-<div class="card search">
-
-  <div class="eyebrow">
-    RESERVATION CHECK
-  </div>
-
-
-  <h1
-    id="pageTitle"
-    class="title"
-  >
-    배우 이름을 입력하세요
-  </h1>
-
-
-  <div
-    id="pageDesc"
-    class="desc"
-  >
-    배우 이름을 입력하면 해당 배우의 예매 현황을 날짜와 시간별로 확인할 수 있습니다.
-  </div>
-
-
-  <!-- 검색 타입 -->
-
-  <div class="searchTabs">
-
-    <button
-      class="searchTab active"
-      data-type="friend"
-      type="button"
-    >
-      배우 이름
-    </button>
-
-
-    <button
-      class="searchTab"
-      data-type="booker"
-      type="button"
-    >
-      예매자 성함
-    </button>
-
-  </div>
-
-
-  <div class="row">
-
-    <input
-      id="nameInput"
-      class="input"
-      placeholder="배우 이름을 입력하세요"
-      autocomplete="off"
-      maxlength="50"
-    >
-
-
-    <button
-      id="searchBtn"
-      class="btn"
-      type="button"
-    >
-      확인
-    </button>
-
-  </div>
-
-
-  <div
-    id="status"
-    class="meta"
-  >
-    엑셀 데이터 확인 중…
-  </div>
-
-
-  <div
-    id="error"
-    class="error"
-  ></div>
-
-</div>
-
-
-<div class="privacy">
-
-  예매자 성함은 그대로 표시되며,
-  연락처는 공개하지 않습니다.
-
-</div>
-
-
-<!-- 지인 미선택 -->
-
-<button
-  id="otherBtn"
-  class="otherLink"
-  type="button"
->
-
-  <span class="otherText">
-
-    <strong>
-      지인 미선택 명단 보기
-    </strong>
-
-    <span id="otherBtnSub">
-      지인을 선택하지 않은 예매자를 확인합니다.
-    </span>
-
-  </span>
-
-  <span class="arrow">
-    ›
-  </span>
-
-</button>
-
-
-<!-- 전체 통계 -->
-
-<div class="stats">
-
-
-  <div class="card stat">
-
-    <div class="label">
-      전체 예매 건수
+      <img
+        src="/poster.png"
+        alt="공연 포스터"
+        class="poster-image"
+      >
     </div>
 
-    <div
-      id="allBookings"
-      class="value"
-    >
-      — <small>건</small>
+
+    <div class="visual-card">
+      <div class="visual-title">
+        📸 단체사진
+      </div>
+
+      <img
+        src="/cast.jpg"
+        alt="공연 단체사진"
+        class="group-image"
+      >
     </div>
 
-  </div>
+  </section>
 
 
-  <div class="card stat">
+  <!-- =========================
+       TOTAL STATUS
+  ========================= -->
 
-    <div class="label">
-      전체 예매 인원
+  <section class="card">
+
+    <div class="card-title">
+      📊 전체 예매 현황
     </div>
 
-    <div
-      id="allPeople"
-      class="value"
-    >
-      — <small>명</small>
+    <div class="card-subtitle">
+      현재까지 접수된 예매 현황입니다.
     </div>
 
-  </div>
+    <div class="stats">
 
+      <div class="stat">
+        <div
+          class="stat-number"
+          id="reservationCount"
+        >
+          -
+        </div>
 
-  <div class="card stat">
-
-    <div class="label">
-      데이터 기준
-    </div>
-
-    <div class="update">
-
-      <strong id="allUpdated">
-        확인 중…
-      </strong>
-
-      엑셀 마지막 응답 기준
-
-    </div>
-
-  </div>
-
-
-</div>
-
-
-<!-- 회차 -->
-
-<div
-  id="episodes"
-  class="episodeGrid"
-></div>
-
-
-<!-- 귀여운 비교 버튼 -->
-
-<button
-  id="compareBtn"
-  class="cuteCompareBtn"
-  type="button"
->
-
-  <div class="cuteIcon">
-    🐹
-  </div>
-
-
-  <div class="cuteText">
-
-    <strong>
-      누가 바닐라에서 더 잘했는가
-    </strong>
-
-    <span>
-      김명훈 🆚 정우영 · 공연 예매 현황 비교
-    </span>
-
-  </div>
-
-
-  <div class="cuteArrow">
-    ✨
-  </div>
-
-</button>
-
-
-<!-- 닫기 버튼 -->
-
-<button
-  id="compareCloseBtn"
-  class="cuteCompareBtn"
-  type="button"
-  style="display:none"
->
-
-  <div class="cuteIcon">
-    🐹
-  </div>
-
-
-  <div class="cuteText">
-
-    <strong>
-      비교 결과 닫기
-    </strong>
-
-    <span>
-      다시 메인 화면으로 돌아가기
-    </span>
-
-  </div>
-
-
-  <div class="cuteArrow">
-    ✕
-  </div>
-
-</button>
-
-
-<!-- 비교 결과 -->
-
-<div
-  id="compareBox"
-  class="card compareBox"
-></div>
-
-
-</section>
-
-
-<!-- 지인 미선택 결과 -->
-
-<section
-  id="otherResult"
-  style="display:none"
->
-
-  <button
-    id="otherBackBtn"
-    class="back"
-    type="button"
-  >
-    ← 다시 보기
-  </button>
-
-
-  <div class="card otherResult">
-
-
-    <div class="otherHeader">
-
-      <div class="otherTitle">
-        지인 미선택 명단
+        <div class="stat-label">
+          총 예매 건수
+        </div>
       </div>
 
 
+      <div class="stat">
+        <div
+          class="stat-number"
+          id="totalPeople"
+        >
+          -
+        </div>
+
+        <div class="stat-label">
+          총 관람 인원
+        </div>
+      </div>
+
+
+      <div class="stat">
+        <div
+          class="stat-number"
+          id="episodeCount"
+        >
+          -
+        </div>
+
+        <div class="stat-label">
+          공연 회차
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="update-time"
+      id="updateTime"
+    >
+      불러오는 중...
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       EPISODES
+  ========================= -->
+
+  <section class="card">
+
+    <div class="card-title">
+      🎟️ 회차별 예매 현황
+    </div>
+
+    <div class="card-subtitle">
+      각 공연 회차별 예매 인원입니다.
+    </div>
+
+    <div
+      class="episodes"
+      id="episodes"
+    >
+      <div class="empty">
+        불러오는 중...
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       SEARCH
+  ========================= -->
+
+  <section class="card">
+
+    <div class="card-title">
+      🔎 예매자 검색
+    </div>
+
+    <div class="card-subtitle">
+      배우 이름 또는 예매자 성함으로 검색할 수 있습니다.
+    </div>
+
+
+    <div class="search-tabs">
+
+      <button
+        class="search-tab active"
+        id="friendTab"
+        onclick="setSearchType('friend')"
+      >
+        배우 이름
+      </button>
+
+      <button
+        class="search-tab"
+        id="bookerTab"
+        onclick="setSearchType('booker')"
+      >
+        예매자 성함
+      </button>
+
+    </div>
+
+
+    <div class="search-box">
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="배우 이름을 입력하세요"
+        onkeydown="handleSearchKey(event)"
+      >
+
+      <button
+        class="search-btn"
+        onclick="searchReservation()"
+      >
+        검색
+      </button>
+
+    </div>
+
+    <div class="search-help" id="searchHelp">
+      예: 김명훈, 정우영
+    </div>
+
+
+    <div
+      class="result"
+      id="searchResult"
+    >
+
       <div
+        class="result-summary"
+        id="resultSummary"
+      ></div>
+
+      <div
+        class="reservation-list"
+        id="reservationList"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       NO FRIEND SELECTION
+  ========================= -->
+
+  <section class="card">
+
+    <div class="card-title">
+      👥 지인 미선택 예매자
+    </div>
+
+    <div class="card-subtitle">
+      지인 선택 없이 예매한 사람들을 확인합니다.
+    </div>
+
+    <button
+      class="other-button"
+      onclick="loadOther()"
+      id="otherButton"
+    >
+
+      <div class="other-button-title">
+        지인 미선택 명단 보기
+      </div>
+
+      <div
+        class="other-button-sub"
+        id="otherBtnSub"
+      >
+        클릭해서 확인하기
+      </div>
+
+    </button>
+
+
+    <div
+      class="other-result"
+      id="otherResult"
+    >
+
+      <div
+        class="other-summary"
         id="otherSummary"
-        class="otherSummary"
+      ></div>
+
+      <div
+        class="other-list"
+        id="otherList"
       ></div>
 
     </div>
 
+  </section>
+
+
+  <!-- =========================
+       CUTE COMPARISON
+  ========================= -->
+
+  <section class="card">
+
+    <button
+      class="compare-trigger"
+      onclick="comparePerformances()"
+    >
+
+      <span class="hamster">
+        🐹
+      </span>
+
+      <div class="compare-trigger-title">
+        누가 바닐라에서 더 잘했는가
+      </div>
+
+      <div class="compare-trigger-sub">
+        김명훈 🆚 정우영 · 공연 예매 현황 비교
+      </div>
+
+    </button>
+
 
     <div
-      id="otherGroups"
-    ></div>
+      class="compare-box"
+      id="compareBox"
+    >
+
+      <div class="compare-header">
+
+        <h2>
+          누가 바닐라에서 더 잘했는가
+        </h2>
+
+        <p>
+          20명의 예매자가 실제로 어떤 공연을 예매했는지 비교합니다.
+        </p>
+
+      </div>
 
 
-  </div>
+      <div class="compare-grid">
+
+        <!-- 정우영 -->
+
+        <div class="compare-side">
+
+          <div class="compare-side-title">
+            ☀️ 정우영 · 점심 공연 3회
+          </div>
+
+          <div
+            class="compare-number"
+            id="lunchPeople"
+          >
+            -
+          </div>
+
+          <div class="compare-unit">
+            관람 인원
+          </div>
+
+          <div
+            class="compare-names"
+            id="lunchNames"
+          ></div>
+
+        </div>
 
 
-  <footer
-    id="otherUpdated"
-  ></footer>
+        <!-- 김명훈 -->
 
-</section>
+        <div class="compare-side">
 
+          <div class="compare-side-title">
+            🌙 김명훈 · 저녁 공연 3회
+          </div>
 
-<!-- 검색 결과 -->
+          <div
+            class="compare-number"
+            id="dinnerPeople"
+          >
+            -
+          </div>
 
-<section
-  id="result"
-  style="display:none"
->
+          <div class="compare-unit">
+            관람 인원
+          </div>
 
-  <button
-    id="backBtn"
-    class="back"
-    type="button"
-  >
-    ← 다시 검색
-  </button>
+          <div
+            class="compare-names"
+            id="dinnerNames"
+          ></div>
 
+        </div>
 
-  <div class="card result">
-
-
-    <div class="resultTop">
-
-      <div
-        id="resultName"
-        class="resultName"
-      ></div>
+      </div>
 
 
-      <div
-        id="summary"
-        class="summary"
-      ></div>
+      <div class="compare-note">
+        ※ 지인 선택 항목이 아니라 실제 예매한 공연 회차를 기준으로 집계합니다.
+      </div>
+
+
+      <button
+        class="compare-close"
+        onclick="closeCompare()"
+      >
+        닫기
+      </button>
 
     </div>
 
-
-    <div
-      id="groups"
-    ></div>
+  </section>
 
 
+  <!-- =========================
+       FOOTER
+  ========================= -->
+
+  <div class="footer">
+    예매자 성함은 그대로 표시되며, 연락처는 공개하지 않습니다.<br>
+    마지막 데이터 업데이트 시간을 기준으로 표시됩니다.
   </div>
 
-
-  <footer
-    id="resultUpdated"
-  ></footer>
-
-</section>
-
-
-</main>
+</div>
 
 
 <script>
 
+  /* =========================
+     GLOBAL
+  ========================= */
 
-const $ =
-  selector =>
-    document.querySelector(selector);
-
-
-let searchType =
-  'friend';
+  let searchType = "friend";
 
 
-/* 날짜 표시 */
+  /* =========================
+     UTILS
+  ========================= */
 
-const fmt =
-  value => {
+  function escapeHtml(value) {
 
-    if(!value){
-      return '-';
-    }
-
-    const date =
-      new Date(value);
-
-    if(
-      Number.isNaN(
-        date.getTime()
-      )
-    ){
-      return value;
-    }
-
-    return new Intl.DateTimeFormat(
-      'ko-KR',
-      {
-        year:'numeric',
-        month:'numeric',
-        day:'numeric',
-        hour:'2-digit',
-        minute:'2-digit',
-        hour12:false,
-        timeZone:'Asia/Seoul'
-      }
-    ).format(date);
-
-  };
-
-
-/* HTML escape */
-
-const esc =
-  value => {
-
-    return String(
-      value ?? ''
-    ).replace(
-      /[&<>"']/g,
-      char => ({
-
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#039;'
-
-      }[char])
-    );
-
-  };
-
-
-/* 검색 탭 */
-
-document
-  .querySelectorAll('.searchTab')
-  .forEach(tab => {
-
-    tab.onclick = () => {
-
-      document
-        .querySelectorAll('.searchTab')
-        .forEach(item =>
-          item.classList.remove('active')
-        );
-
-      tab.classList.add('active');
-
-      searchType =
-        tab.dataset.type;
-
-
-      if(
-        searchType === 'booker'
-      ){
-
-        $('#pageTitle')
-          .textContent =
-            '예매자 성함을 입력하세요';
-
-        $('#pageDesc')
-          .textContent =
-            '예매자 성함으로 검색하면 해당 예매자의 실제 예매 내역을 확인할 수 있습니다.';
-
-        $('#nameInput')
-          .placeholder =
-            '예매자 성함을 입력하세요';
-
-      }else{
-
-        $('#pageTitle')
-          .textContent =
-            '배우 이름을 입력하세요';
-
-        $('#pageDesc')
-          .textContent =
-            '배우 이름을 입력하면 해당 배우의 예매 현황을 날짜와 시간별로 확인할 수 있습니다.';
-
-        $('#nameInput')
-          .placeholder =
-            '배우 이름을 입력하세요';
-
-      }
-
-
-      $('#nameInput').focus();
-
-    };
-
-  });
-
-
-/* 전체 현황 */
-
-async function status(){
-
-  try{
-
-    const response =
-      await fetch('/api/status');
-
-    const data =
-      await response.json();
-
-    if(!response.ok){
-      throw new Error(
-        data.error
-      );
-    }
-
-
-    $('#allBookings')
-      .innerHTML =
-        data.reservationCount +
-        ' <small>건</small>';
-
-
-    $('#allPeople')
-      .innerHTML =
-        data.totalPeople +
-        ' <small>명</small>';
-
-
-    $('#allUpdated')
-      .textContent =
-        fmt(
-          data.latestResponse
-        );
-
-
-    $('#status')
-      .textContent =
-        '엑셀 마지막 응답: ' +
-        fmt(data.latestResponse) +
-        ' (KST)';
-
-
-    renderEpisodes(
-      data.episodes || []
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    $('#status')
-      .textContent =
-        '데이터를 불러오지 못했습니다.';
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
   }
 
-}
 
+  function formatNumber(value) {
 
-/* 회차 */
+    return Number(value || 0).toLocaleString("ko-KR");
 
-function renderEpisodes(
-  episodes
-){
-
-  const element =
-    $('#episodes');
-
-
-  if(!episodes.length){
-
-    element.innerHTML = '';
-
-    return;
   }
 
 
-  element.innerHTML =
-    episodes
-      .slice(0, 6)
-      .map(episode => `
+  function formatSlot(slot) {
 
-        <div class="card episode">
+    if (!slot) {
+      return "";
+    }
 
-          <div class="episodeTop">
+    if (typeof slot === "string") {
+      return slot;
+    }
 
-            <span class="episodeNo">
-              EPISODE ${esc(episode.episode)}
-            </span>
+    if (slot.label) {
+      return slot.label;
+    }
 
-            <span class="episodeDate">
-              ${esc(episode.label)}
-            </span>
+    if (slot.date && slot.time) {
+      return `${slot.date} ${slot.time}`;
+    }
 
-          </div>
+    if (slot.raw) {
+      return slot.raw;
+    }
 
-
-          <div class="episodePeople">
-
-            ${episode.people}
-
-            <small>
-              명
-            </small>
-
-          </div>
+    return "";
+  }
 
 
-          <div class="episodeBookings">
+  /* =========================
+     STATUS
+  ========================= */
 
-            예매 ${episode.bookings}건
+  async function loadStatus() {
 
-          </div>
+    try {
 
+      const response =
+        await fetch("/api/status");
+
+      if (!response.ok) {
+        throw new Error("상태 정보를 불러오지 못했습니다.");
+      }
+
+      const data =
+        await response.json();
+
+
+      document.getElementById(
+        "reservationCount"
+      ).textContent =
+        formatNumber(data.reservationCount);
+
+
+      document.getElementById(
+        "totalPeople"
+      ).textContent =
+        formatNumber(data.totalPeople);
+
+
+      document.getElementById(
+        "episodeCount"
+      ).textContent =
+        formatNumber(
+          Array.isArray(data.episodes)
+            ? data.episodes.length
+            : 0
+        );
+
+
+      renderEpisodes(data.episodes || []);
+
+
+      let latest =
+        data.latestResponse ||
+        data.fileMtime ||
+        "";
+
+
+      if (latest) {
+
+        document.getElementById(
+          "updateTime"
+        ).textContent =
+          `마지막 업데이트: ${latest}`;
+
+      } else {
+
+        document.getElementById(
+          "updateTime"
+        ).textContent =
+          "데이터 업데이트 정보를 확인할 수 없습니다.";
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      document.getElementById(
+        "updateTime"
+      ).textContent =
+        "데이터를 불러오지 못했습니다.";
+
+      document.getElementById(
+        "episodes"
+      ).innerHTML = `
+        <div class="error">
+          예매 데이터를 불러오는 중 문제가 발생했습니다.
         </div>
-
-      `)
-      .join('');
-
-}
-
-
-/* 지인 미선택 */
-
-async function loadOther(){
-
-  try{
-
-    const response =
-      await fetch('/api/other');
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok){
-
-      throw new Error(
-        data.error ||
-        '명단을 불러오지 못했습니다.'
-      );
-
-    }
-
-
-    $('#otherBtnSub')
-      .textContent =
-        `지인을 선택하지 않은 예매자 ${data.total}건 · ${data.totalPeople}명`;
-
-
-    $('#otherSummary')
-      .innerHTML =
-        `<strong>${data.totalPeople}명</strong><br>총 ${data.total}건`;
-
-
-    const rows =
-      data.reservations
-        .map(item => {
-
-          const slots =
-            (item.slots || [])
-              .map(slot =>
-                `${slot.month}월 ${slot.day}일 ${slot.label}`
-              )
-              .join(' · ');
-
-
-          return `
-
-            <div class="otherRow">
-
-              <div>
-
-                <div class="otherName">
-                  ${esc(item.name)}
-                </div>
-
-                <span class="otherSlot">
-                  ${esc(slots)}
-                </span>
-
-              </div>
-
-
-              <div class="otherMeta">
-                ${item.count}명
-              </div>
-
-            </div>
-
-          `;
-
-        })
-        .join('');
-
-
-    $('#otherGroups')
-      .innerHTML =
-        rows ||
-        '<div class="empty">지인 미선택 예매자가 없습니다.</div>';
-
-
-    $('#otherUpdated')
-      .textContent =
-        '엑셀 마지막 응답 · ' +
-        fmt(data.latestResponse) +
-        ' (KST)';
-
-
-  }catch(error){
-
-    console.error(error);
-
-    $('#otherGroups')
-      .innerHTML =
-        '<div class="empty">명단을 불러오지 못했습니다.</div>';
-
-  }
-
-}
-
-
-/* 미선택 화면 */
-
-function showOther(){
-
-  $('#home').style.display =
-    'none';
-
-  $('#result').style.display =
-    'none';
-
-  $('#otherResult').style.display =
-    'block';
-
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
-}
-
-
-/* 미선택 화면 닫기 */
-
-function hideOther(){
-
-  $('#otherResult').style.display =
-    'none';
-
-  $('#home').style.display =
-    'block';
-
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
-}
-
-
-/* 검색 */
-
-async function search(){
-
-  const name =
-    $('#nameInput')
-      .value
-      .trim();
-
-
-  $('#error').textContent = '';
-
-
-  if(!name){
-
-    $('#error')
-      .textContent =
-        searchType === 'booker'
-          ? '예매자 성함을 입력해주세요.'
-          : '배우 이름을 입력해주세요.';
-
-    return;
-  }
-
-
-  const button =
-    $('#searchBtn');
-
-
-  button.disabled = true;
-
-  button.textContent =
-    '조회 중';
-
-
-  try{
-
-    const response =
-      await fetch(
-        '/api/search?type=' +
-        encodeURIComponent(searchType) +
-        '&name=' +
-        encodeURIComponent(name)
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok){
-
-      throw new Error(
-        data.error ||
-        '조회에 실패했습니다.'
-      );
-
-    }
-
-
-    render(data);
-
-
-  }catch(error){
-
-    console.error(error);
-
-    $('#error')
-      .textContent =
-        error.message;
-
-
-  }finally{
-
-    button.disabled = false;
-
-    button.textContent =
-      '확인';
-
-  }
-
-}
-
-
-/* 검색 결과 */
-
-function render(data){
-
-  $('#home').style.display =
-    'none';
-
-  $('#otherResult').style.display =
-    'none';
-
-  $('#result').style.display =
-    'block';
-
-
-  $('#resultName')
-    .textContent =
-
-      searchType === 'booker'
-        ? data.name + '님 예매 현황'
-        : data.name + ' 관련 예매 현황';
-
-
-  $('#summary')
-    .innerHTML =
-
-      '<strong>' +
-      data.totalPeople +
-      '명</strong><br>총 ' +
-      data.totalBookings +
-      '건';
-
-
-  const days =
-    new Map();
-
-
-  for(
-    const reservation
-    of data.reservations
-  ){
-
-    for(
-      const slot
-      of reservation.slots
-    ){
-
-      const key =
-        slot.month +
-        '-' +
-        slot.day;
-
-
-      if(!days.has(key)){
-
-        days.set(
-          key,
-          {
-            month:slot.month,
-            day:slot.day,
-            times:new Map()
-          }
-        );
-
-      }
-
-
-      const day =
-        days.get(key);
-
-
-      if(
-        !day.times.has(
-          slot.key
-        )
-      ){
-
-        day.times.set(
-          slot.key,
-          {
-            label:slot.label,
-            minutes:
-              slot.hour * 60 +
-              slot.minute,
-            rows:[]
-          }
-        );
-
-      }
-
-
-      const time =
-        day.times.get(
-          slot.key
-        );
-
-
-      if(
-        !time.rows.some(
-          item =>
-            item.id ===
-            reservation.id
-        )
-      ){
-
-        time.rows.push(
-          reservation
-        );
-
-      }
-
-    }
-
-  }
-
-
-  let html = '';
-
-
-  for(
-    const day
-    of [...days.values()]
-      .sort(
-        (a,b) =>
-          a.month - b.month ||
-          a.day - b.day
-      )
-  ){
-
-    html +=
-      `<section class="day">
-        <h2>
-          ${day.month}월 ${day.day}일
-        </h2>`;
-
-
-    for(
-      const time
-      of [...day.times.values()]
-        .sort(
-          (a,b) =>
-            a.minutes -
-            b.minutes
-        )
-    ){
-
-      const people =
-        time.rows.reduce(
-          (sum,reservation) =>
-            sum + reservation.count,
-          0
-        );
-
-
-      html += `
-
-        <div class="time">
-
-          <div class="timeHead">
-
-            <span class="timeLabel">
-              ${esc(time.label)}
-            </span>
-
-            <span class="timeMeta">
-              ${time.rows.length}건 · ${people}명
-            </span>
-
-          </div>
-
-
-          ${time.rows
-            .map(reservation => `
-
-              <div class="person">
-
-                <span class="personName">
-                  ${esc(reservation.name)}
-                </span>
-
-                <span class="personCount">
-                  ${reservation.count}명
-                </span>
-
-              </div>
-
-            `)
-            .join('')}
-
-        </div>
-
       `;
 
     }
 
+  }
 
-    html +=
-      '</section>';
+
+  /* =========================
+     EPISODES
+  ========================= */
+
+  function renderEpisodes(episodes) {
+
+    const container =
+      document.getElementById("episodes");
+
+
+    if (!episodes.length) {
+
+      container.innerHTML = `
+        <div class="empty">
+          회차 정보가 없습니다.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML =
+      episodes.map((episode, index) => {
+
+        const label =
+          episode.label ||
+          episode.name ||
+          `공연 ${index + 1}`;
+
+        const count =
+          episode.people ??
+          episode.count ??
+          episode.totalPeople ??
+          0;
+
+        let time = "";
+
+        if (episode.time) {
+          time = episode.time;
+        }
+
+        else if (episode.datetime) {
+          time = episode.datetime;
+        }
+
+        else {
+          const parts =
+            String(label).split(" ");
+
+          time =
+            parts.slice(0, 4).join(" ");
+        }
+
+
+        return `
+          <div class="episode">
+
+            <div class="episode-info">
+
+              <div class="episode-title">
+                ${escapeHtml(label)}
+              </div>
+
+              <div class="episode-time">
+                ${escapeHtml(time)}
+              </div>
+
+            </div>
+
+            <div class="episode-count">
+              ${formatNumber(count)}명
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
 
   }
 
 
-  $('#groups')
-    .innerHTML =
-      html ||
-      '<div class="empty">해당 예매 내역이 없습니다.</div>';
+  /* =========================
+     SEARCH TYPE
+  ========================= */
+
+  function setSearchType(type) {
+
+    searchType = type;
 
 
-  $('#resultUpdated')
-    .textContent =
-      '엑셀 마지막 응답 · ' +
-      fmt(data.latestResponse) +
-      ' (KST)';
+    const friendTab =
+      document.getElementById("friendTab");
 
-}
+    const bookerTab =
+      document.getElementById("bookerTab");
 
 
-/* 바닐라 비교 */
+    friendTab.classList.toggle(
+      "active",
+      type === "friend"
+    );
 
-async function comparePerformances(){
-
-  const box =
-    $('#compareBox');
-
-  const button =
-    $('#compareBtn');
-
-
-  button.disabled = true;
+    bookerTab.classList.toggle(
+      "active",
+      type === "booker"
+    );
 
 
-  try{
-
-    const response =
-      await fetch(
-        '/api/compare-performances'
-      );
+    const input =
+      document.getElementById("searchInput");
 
 
-    const data =
-      await response.json();
+    if (type === "friend") {
 
+      input.placeholder =
+        "배우 이름을 입력하세요";
 
-    if(!response.ok){
+      document.getElementById(
+        "searchHelp"
+      ).textContent =
+        "예: 김명훈, 정우영";
 
-      throw new Error(
-        data.error ||
-        '집계에 실패했습니다.'
-      );
+    } else {
+
+      input.placeholder =
+        "예매자 성함을 입력하세요";
+
+      document.getElementById(
+        "searchHelp"
+      ).textContent =
+        "예: 서태원, 김혜나";
 
     }
 
 
-    const lunchNames =
-      data.lunch.names
-        .map(
-          person =>
-            esc(person.name) +
-            ' ' +
-            person.count +
-            '명'
-        )
-        .join(', ') ||
-      '없음';
+    input.focus();
+
+  }
 
 
-    const dinnerNames =
-      data.dinner.names
-        .map(
-          person =>
-            esc(person.name) +
-            ' ' +
-            person.count +
-            '명'
-        )
-        .join(', ') ||
-      '없음';
+  /* =========================
+     SEARCH
+  ========================= */
+
+  function handleSearchKey(event) {
+
+    if (event.key === "Enter") {
+      searchReservation();
+    }
+
+  }
 
 
-    const both =
-      data.both
-        .map(
-          name =>
-            esc(name)
-        )
-        .join(', ') ||
-      '없음';
+  async function searchReservation() {
+
+    const input =
+      document.getElementById("searchInput");
+
+    const query =
+      input.value.trim();
 
 
-    box.innerHTML = `
+    if (!query) {
 
-      <div class="cardHeading">
+      alert("검색어를 입력해주세요.");
 
-        <div class="cardTitle">
-          누가 바닐라에서 더 잘했는가
-        </div>
+      input.focus();
 
-        <div class="cardSub">
-          김명훈 🆚 정우영
-        </div>
-
-      </div>
+      return;
+    }
 
 
-      <div class="compareGrid">
+    const result =
+      document.getElementById("searchResult");
+
+    const summary =
+      document.getElementById("resultSummary");
+
+    const list =
+      document.getElementById("reservationList");
 
 
-        <div class="compareSide">
+    result.classList.add("show");
 
-          <b>
-            ☀️ 정우영 · 점심 공연 3회
-          </b>
+    summary.innerHTML =
+      "검색 중입니다...";
 
-          <div class="compareNum">
-            ${data.lunch.people}명
-          </div>
-
-          <div class="compareNames">
-            ${lunchNames}
-          </div>
-
-        </div>
+    list.innerHTML = "";
 
 
-        <div class="compareSide">
+    try {
 
-          <b>
-            🌙 김명훈 · 저녁 공연 3회
-          </b>
-
-          <div class="compareNum">
-            ${data.dinner.people}명
-          </div>
-
-          <div class="compareNames">
-            ${dinnerNames}
-          </div>
-
-        </div>
+      const response =
+        await fetch(
+          `/api/search?type=${encodeURIComponent(searchType)}&name=${encodeURIComponent(query)}`
+        );
 
 
-      </div>
+      const data =
+        await response.json();
 
 
-      <div class="compareBoth">
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "검색에 실패했습니다."
+        );
+      }
 
+
+      const reservations =
+        data.reservations || [];
+
+
+      summary.innerHTML = `
         <strong>
-          🔄 점심 + 저녁 모두 예매
+          ${formatNumber(data.totalPeople || 0)}명
         </strong>
-
         <br>
-
-        ${both}
-
-      </div>
-
-
-      <div class="compareNote">
-
-        지정된 20명의 예매자를 기준으로
-        실제 예매한 날짜와 시간을 확인합니다.
-        지인 선택 값은 이 비교에 사용하지 않습니다.
-
-      </div>
-
-    `;
+        <span>
+          ${formatNumber(reservations.length)}건의 예매
+        </span>
+      `;
 
 
-    box.style.display =
-      'block';
+      if (!reservations.length) {
+
+        list.innerHTML = `
+          <div class="empty">
+            검색 결과가 없습니다.
+          </div>
+        `;
+
+        return;
+      }
 
 
-    button.style.display =
-      'none';
+      list.innerHTML =
+        reservations.map((reservation) => {
+
+          const slots =
+            reservation.slots || [];
 
 
-    $('#compareCloseBtn')
-      .style.display =
-        'flex';
+          const slotText =
+            slots.length
+              ? slots.map(formatSlot).join("<br>")
+              : "공연 회차 정보 없음";
 
 
-    setTimeout(() => {
+          return `
+            <div class="reservation">
 
-      box.scrollIntoView({
-        behavior:'smooth',
-        block:'start'
-      });
+              <div class="reservation-top">
 
-    },50);
+                <div class="reservation-name">
+                  ${escapeHtml(reservation.name)}
+                </div>
+
+                <div class="reservation-count">
+                  ${formatNumber(reservation.count)}명
+                </div>
+
+              </div>
+
+              <div class="reservation-slots">
+                ${slotText}
+              </div>
+
+            </div>
+          `;
+
+        }).join("");
 
 
-  }catch(error){
+    } catch (error) {
 
-    console.error(error);
+      console.error(error);
 
-    box.innerHTML =
-      `<div class="empty">
-        ${esc(error.message)}
-      </div>`;
+      summary.innerHTML = `
+        <div class="error">
+          ${escapeHtml(error.message)}
+        </div>
+      `;
 
-    box.style.display =
-      'block';
+      list.innerHTML = "";
 
-  }finally{
-
-    button.disabled = false;
+    }
 
   }
 
-}
+
+  /* =========================
+     OTHER
+  ========================= */
+
+  async function loadOther() {
+
+    const result =
+      document.getElementById("otherResult");
+
+    const summary =
+      document.getElementById("otherSummary");
+
+    const list =
+      document.getElementById("otherList");
+
+    const buttonSub =
+      document.getElementById("otherBtnSub");
 
 
-/* 비교 닫기 */
+    if (result.classList.contains("show")) {
 
-function closeCompare(){
+      result.classList.remove("show");
 
-  $('#compareBox')
-    .style.display =
-      'none';
-
-
-  $('#compareCloseBtn')
-    .style.display =
-      'none';
-
-
-  $('#compareBtn')
-    .style.display =
-      'flex';
-
-}
-
-
-/* 검색 버튼 */
-
-$('#searchBtn').onclick =
-  search;
-
-
-/* 엔터 검색 */
-
-$('#nameInput').onkeydown =
-  event => {
-
-    if(event.key === 'Enter'){
-      search();
+      return;
     }
 
-  };
+
+    summary.innerHTML =
+      "불러오는 중...";
+
+    list.innerHTML = "";
+
+    result.classList.add("show");
 
 
-/* 검색 결과 뒤로가기 */
+    try {
 
-$('#backBtn').onclick =
-  () => {
-
-    $('#result')
-      .style.display =
-        'none';
-
-    $('#home')
-      .style.display =
-        'block';
-
-    $('#nameInput').focus();
-
-  };
+      const response =
+        await fetch("/api/other");
 
 
-/* 미선택 */
-
-$('#otherBtn').onclick =
-  showOther;
+      const data =
+        await response.json();
 
 
-$('#otherBackBtn').onclick =
-  hideOther;
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "정보를 불러오지 못했습니다."
+        );
+      }
 
 
-/* 비교 */
-
-$('#compareBtn').onclick =
-  comparePerformances;
+      buttonSub.textContent =
+        `지인을 선택하지 않은 예매자 ${formatNumber(data.total || 0)}명 · ${formatNumber(data.totalPeople || 0)}명`;
 
 
-$('#compareCloseBtn').onclick =
-  closeCompare;
+      summary.innerHTML = `
+        <strong>
+          ${formatNumber(data.totalPeople || 0)}명
+        </strong>
+        <br>
+        <span>
+          총 ${formatNumber(data.total || 0)}건
+        </span>
+      `;
 
 
-/* 최초 실행 */
+      const reservations =
+        data.reservations || [];
 
-status();
 
-loadOther();
+      if (!reservations.length) {
+
+        list.innerHTML = `
+          <div class="empty">
+            지인 미선택 예매자가 없습니다.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      list.innerHTML =
+        reservations.map((reservation) => {
+
+          const slots =
+            reservation.slots || [];
+
+
+          const slotText =
+            slots.length
+              ? slots.map(formatSlot).join("<br>")
+              : "회차 정보 없음";
+
+
+          return `
+            <div class="other-row">
+
+              <div class="other-name">
+                ${escapeHtml(reservation.name)}
+              </div>
+
+              <div class="other-detail">
+                ${escapeHtml(slotText)}
+                <br>
+                ${formatNumber(reservation.count)}명
+              </div>
+
+            </div>
+          `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      summary.innerHTML = `
+        <div class="error">
+          ${escapeHtml(error.message)}
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================
+     COMPARISON
+  ========================= */
+
+  async function comparePerformances() {
+
+    const box =
+      document.getElementById("compareBox");
+
+
+    box.classList.add("show");
+
+
+    box.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+
+
+    document.getElementById(
+      "lunchPeople"
+    ).textContent = "...";
+
+
+    document.getElementById(
+      "dinnerPeople"
+    ).textContent = "...";
+
+
+    document.getElementById(
+      "lunchNames"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+      "dinnerNames"
+    ).innerHTML = "";
+
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/compare-performances"
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "비교 데이터를 불러오지 못했습니다."
+        );
+      }
+
+
+      const lunch =
+        data.lunch || {};
+
+      const dinner =
+        data.dinner || {};
+
+
+      document.getElementById(
+        "lunchPeople"
+      ).textContent =
+        formatNumber(lunch.people || 0);
+
+
+      document.getElementById(
+        "dinnerPeople"
+      ).textContent =
+        formatNumber(dinner.people || 0);
+
+
+      renderCompareNames(
+        "lunchNames",
+        lunch.names || []
+      );
+
+
+      renderCompareNames(
+        "dinnerNames",
+        dinner.names || []
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      document.getElementById(
+        "lunchPeople"
+      ).textContent = "-";
+
+      document.getElementById(
+        "dinnerPeople"
+      ).textContent = "-";
+
+      document.getElementById(
+        "lunchNames"
+      ).innerHTML = `
+        <div class="empty">
+          데이터를 불러오지 못했습니다.
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  function renderCompareNames(
+    elementId,
+    names
+  ) {
+
+    const container =
+      document.getElementById(elementId);
+
+
+    if (!names.length) {
+
+      container.innerHTML = `
+        <div class="empty">
+          해당 공연 예매자가 없습니다.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML =
+      names.map((item) => {
+
+        const slotText =
+          item.slots && item.slots.length
+            ? item.slots.map(formatSlot).join(", ")
+            : "";
+
+
+        return `
+          <div class="compare-name">
+
+            <span>
+              ${escapeHtml(item.name)}
+            </span>
+
+            <span>
+              ${formatNumber(item.count)}명
+            </span>
+
+          </div>
+
+          ${
+            slotText
+              ? `
+                <div
+                  style="
+                    color:#aaa;
+                    font-size:10px;
+                    margin:-3px 5px 5px;
+                  "
+                >
+                  ${escapeHtml(slotText)}
+                </div>
+              `
+              : ""
+          }
+        `;
+
+      }).join("");
+
+  }
+
+
+  function closeCompare() {
+
+    document
+      .getElementById("compareBox")
+      .classList.remove("show");
+
+  }
+
+
+  /* =========================
+     INITIAL LOAD
+  ========================= */
+
+  loadStatus();
 
 </script>
 
 </body>
-
 </html>
