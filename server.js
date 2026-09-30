@@ -1,3 +1,4 @@
+
 const express = require('express');
 const XLSX = require('xlsx');
 const fs = require('fs');
@@ -8,7 +9,7 @@ const PORT = Number(process.env.PORT || 3000);
 
 const EXCEL_FILE = path.join(__dirname, 'data', 'reservations.xlsx');
 
-// 필요하면 기존 제외 명단 유지
+// 제외할 예매자
 const EXCLUDED_NAMES = new Set([
   '김맹훈',
   '정해진'
@@ -53,9 +54,7 @@ function responseTimestamp(value) {
 
   const timestamp = Date.parse(valueText);
 
-  return Number.isNaN(timestamp)
-    ? NaN
-    : timestamp;
+  return Number.isNaN(timestamp) ? NaN : timestamp;
 }
 
 function responseDate(value) {
@@ -70,12 +69,6 @@ function responseDate(value) {
 
 function parseSlot(raw) {
   const value = text(raw);
-
-  /*
-    예:
-    9월 26일 (토) 13:00
-    9월 26일 13:00
-  */
 
   const match = value.match(
     /(\d{1,2})월\s*(\d{1,2})일\s*(?:\([^)]*\))?\s*(\d{1,2}):(\d{2})/
@@ -95,43 +88,29 @@ function parseSlot(raw) {
     day,
     hour,
     minute,
-
-    key:
-      `${month}-${day}-${hour}:${String(minute).padStart(2, '0')}`,
-
-    label:
-      `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+    key: `${month}-${day}-${hour}:${String(minute).padStart(2, '0')}`,
+    label: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
   };
 }
 
 function readExcel() {
   if (!fs.existsSync(EXCEL_FILE)) {
-    throw new Error(
-      'data/reservations.xlsx 파일을 찾을 수 없습니다.'
-    );
+    throw new Error('data/reservations.xlsx 파일을 찾을 수 없습니다.');
   }
 
-  const workbook = XLSX.readFile(
-    EXCEL_FILE,
-    {
-      cellDates: true
-    }
-  );
+  const workbook = XLSX.readFile(EXCEL_FILE, {
+    cellDates: true
+  });
 
   const sheetName = workbook.SheetNames[0];
-
   const worksheet = workbook.Sheets[sheetName];
 
-  const rows = XLSX.utils.sheet_to_json(
-    worksheet,
-    {
-      defval: ''
-    }
-  );
+  const rows = XLSX.utils.sheet_to_json(worksheet, {
+    defval: ''
+  });
 
   const reservations = rows
     .map((row, index) => {
-
       const name = text(
         getColumn(row, [
           '예매자 성함(*)',
@@ -172,21 +151,14 @@ function readExcel() {
 
       return {
         id: index + 2,
-
         name,
-
         count,
-
         friends,
-
         slots,
-
-        hasFriendSelection:
-          friends.length > 0
+        hasFriendSelection: friends.length > 0
       };
     })
     .filter(reservation => {
-
       return (
         reservation.name &&
         reservation.count > 0 &&
@@ -195,19 +167,11 @@ function readExcel() {
       );
     });
 
-  /*
-    마지막 응답일시
-  */
-
+  // 마지막 응답일시
   const responseList = rows
     .map(row => {
-
-      const raw = getColumn(row, [
-        '응답일시'
-      ]);
-
-      const timestamp =
-        responseTimestamp(raw);
+      const raw = getColumn(row, ['응답일시']);
+      const timestamp = responseTimestamp(raw);
 
       if (Number.isNaN(timestamp)) {
         return null;
@@ -219,184 +183,104 @@ function readExcel() {
       };
     })
     .filter(Boolean)
-    .sort((a, b) =>
-      a.timestamp - b.timestamp
-    );
+    .sort((a, b) => a.timestamp - b.timestamp);
 
   const latestResponse =
     responseList.length > 0
       ? responseList[responseList.length - 1].value
       : null;
 
-  /*
-    회차별 집계
-  */
-
+  // 회차별 집계
   const episodeMap = new Map();
 
   for (const reservation of reservations) {
-
     for (const slot of reservation.slots) {
-
       if (!episodeMap.has(slot.key)) {
-
-        episodeMap.set(
-          slot.key,
-          {
-            key: slot.key,
-
-            month: slot.month,
-
-            day: slot.day,
-
-            hour: slot.hour,
-
-            minute: slot.minute,
-
-            label:
-              `${slot.month}월 ${slot.day}일 ${slot.label}`,
-
-            people: 0,
-
-            bookings: 0
-          }
-        );
+        episodeMap.set(slot.key, {
+          key: slot.key,
+          month: slot.month,
+          day: slot.day,
+          hour: slot.hour,
+          minute: slot.minute,
+          label: `${slot.month}월 ${slot.day}일 ${slot.label}`,
+          people: 0,
+          bookings: 0
+        });
       }
 
-      const episode =
-        episodeMap.get(slot.key);
+      const episode = episodeMap.get(slot.key);
 
-      episode.people +=
-        reservation.count;
-
+      episode.people += reservation.count;
       episode.bookings += 1;
     }
   }
 
-  const episodes =
-    [...episodeMap.values()]
-      .sort((a, b) => {
+  const episodes = [...episodeMap.values()]
+    .sort((a, b) => {
+      return (
+        (a.month - b.month) ||
+        (a.day - b.day) ||
+        (a.hour - b.hour) ||
+        (a.minute - b.minute)
+      );
+    })
+    .map((episode, index) => ({
+      episode: index + 1,
+      ...episode
+    }));
 
-        return (
-          (a.month - b.month) ||
-          (a.day - b.day) ||
-          (a.hour - b.hour) ||
-          (a.minute - b.minute)
-        );
-      })
-      .map((episode, index) => {
-
-        return {
-          episode: index + 1,
-          ...episode
-        };
-      });
-
-  const fileMtime =
-    fs.statSync(EXCEL_FILE)
-      .mtime
-      .toISOString();
+  const fileMtime = fs.statSync(EXCEL_FILE).mtime.toISOString();
 
   return {
     reservations,
-
     latestResponse,
-
     fileMtime,
-
-    sourceRows:
-      rows.length,
-
+    sourceRows: rows.length,
     episodes
   };
 }
 
-
-/* --------------------------------------------------
-   기본 설정
--------------------------------------------------- */
-
+// 기본 설정
 app.disable('x-powered-by');
 
 app.use((req, res, next) => {
-
-  res.setHeader(
-    'X-Content-Type-Options',
-    'nosniff'
-  );
-
-  res.setHeader(
-    'Referrer-Policy',
-    'same-origin'
-  );
-
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'same-origin');
   next();
 });
 
-
-/* --------------------------------------------------
-   정적 파일
--------------------------------------------------- */
-
+// 정적 파일
 app.use(
-  express.static(
-    path.join(__dirname, 'public'),
-    {
-      extensions: ['html']
-    }
-  )
+  express.static(path.join(__dirname, 'public'), {
+    extensions: ['html']
+  })
 );
 
-
-/* --------------------------------------------------
-   Health Check
--------------------------------------------------- */
-
+// Health Check
 app.get('/health', (req, res) => {
-
   res.json({
     ok: true
   });
 });
 
-
-/* --------------------------------------------------
-   전체 현황
--------------------------------------------------- */
-
+// 전체 현황
 app.get('/api/status', (req, res) => {
-
   try {
-
     const data = readExcel();
 
-    const totalPeople =
-      data.reservations.reduce(
-        (sum, reservation) =>
-          sum + reservation.count,
-        0
-      );
+    const totalPeople = data.reservations.reduce(
+      (sum, reservation) => sum + reservation.count,
+      0
+    );
 
     res.json({
-
-      reservationCount:
-        data.reservations.length,
-
+      reservationCount: data.reservations.length,
       totalPeople,
-
-      latestResponse:
-        data.latestResponse,
-
-      fileMtime:
-        data.fileMtime,
-
-      episodes:
-        data.episodes
-
+      latestResponse: data.latestResponse,
+      fileMtime: data.fileMtime,
+      episodes: data.episodes
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
@@ -405,83 +289,45 @@ app.get('/api/status', (req, res) => {
   }
 });
 
-
-/* --------------------------------------------------
-   검색
-
-   type=friend
-   → 배우 이름 검색
-
-   type=booker
-   → 예매자 성함 검색
--------------------------------------------------- */
-
+// 검색
+// type=friend: 지인 이름 검색
+// type=booker: 예매자 이름 검색
 app.get('/api/search', (req, res) => {
-
   try {
-
-    const query =
-      text(req.query.name);
-
-    const type =
-      text(req.query.type) || 'friend';
+    const query = text(req.query.name);
+    const type = text(req.query.type) || 'friend';
 
     if (!query) {
-
       return res.status(400).json({
         error: '검색어를 입력해주세요.'
       });
     }
 
     if (query.length > 50) {
-
       return res.status(400).json({
         error: '검색어가 너무 깁니다.'
       });
     }
 
-    const normalized =
-      query.replace(/\s+/g, '');
+    const normalized = query.replace(/\s+/g, '');
+    const data = readExcel();
 
-    const data =
-      readExcel();
+    const matches = data.reservations.filter(reservation => {
+      // 예매자 성함 검색
+      if (type === 'booker') {
+        return reservation.name
+          .replace(/\s+/g, '')
+          .includes(normalized);
+      }
 
-    const matches =
-      data.reservations.filter(
-        reservation => {
-
-          /*
-            예매자 성함 검색
-          */
-
-          if (type === 'booker') {
-
-            return reservation.name
-              .replace(/\s+/g, '')
-              .includes(normalized);
-          }
-
-          /*
-            배우 이름 검색
-
-            기존 지인 선택 데이터를 기준으로 검색
-          */
-
-          return reservation.friends.some(
-            friend =>
-              friend
-                .replace(/\s+/g, '')
-                .includes(normalized)
-          );
-        }
+      // 지인 이름 검색
+      return reservation.friends.some(friend =>
+        friend.replace(/\s+/g, '').includes(normalized)
       );
+    });
 
-    /*
-      날짜순 정렬
-    */
-
+    // 날짜순 정렬
     matches.sort((a, b) => {
-
       const A = a.slots[0] || {};
       const B = b.slots[0] || {};
 
@@ -490,58 +336,38 @@ app.get('/api/search', (req, res) => {
         (A.day - B.day) ||
         (A.hour - B.hour) ||
         (A.minute - B.minute) ||
-        a.name.localeCompare(
-          b.name,
-          'ko'
-        )
+        a.name.localeCompare(b.name, 'ko')
       );
     });
 
-    const totalPeople =
-      matches.reduce(
-        (sum, reservation) =>
-          sum + reservation.count,
-        0
-      );
+    const totalPeople = matches.reduce(
+      (sum, reservation) => sum + reservation.count,
+      0
+    );
 
     res.json({
-
       name: query,
-
       type,
-
-      totalBookings:
-        matches.length,
-
+      totalBookings: matches.length,
       totalPeople,
+      reservations: matches.map(reservation => ({
+        id: reservation.id,
+        name: reservation.name,
+        count: reservation.count,
+        friends: reservation.friends,
 
-      reservations:
-        matches.map(reservation => ({
-          id:
-            reservation.id,
+        // 예매자 검색 결과에서 누구의 지인인지 표시
+        relatedTo: reservation.friends.length > 0
+          ? reservation.friends.join(', ')
+          : '미선택',
 
-          name:
-            reservation.name,
-
-          count:
-            reservation.count,
-
-          friends:
-            reservation.friends,
-
-          slots:
-            reservation.slots
-        })),
-
-      latestResponse:
-        data.latestResponse,
-
-      fileMtime:
-        data.fileMtime
+        // 예매 날짜와 시간
+        slots: reservation.slots
+      })),
+      latestResponse: data.latestResponse,
+      fileMtime: data.fileMtime
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
@@ -550,89 +376,50 @@ app.get('/api/search', (req, res) => {
   }
 });
 
-
-/* --------------------------------------------------
-   지인 미선택 예매자
-
-   지인 선택 값이 비어있는 사람만 표시
--------------------------------------------------- */
-
+// 지인 미선택 예매자
 app.get('/api/other', (req, res) => {
-
   try {
+    const data = readExcel();
 
-    const data =
-      readExcel();
+    const reservations = data.reservations
+      .filter(reservation => {
+        return (
+          !reservation.friends ||
+          reservation.friends.length === 0
+        );
+      })
+      .sort((a, b) => {
+        const A = a.slots[0] || {};
+        const B = b.slots[0] || {};
 
-    const reservations =
-      data.reservations
-        .filter(reservation => {
+        return (
+          (A.month - B.month) ||
+          (A.day - B.day) ||
+          (A.hour - B.hour) ||
+          (A.minute - B.minute) ||
+          a.name.localeCompare(b.name, 'ko')
+        );
+      })
+      .map(reservation => ({
+        id: reservation.id,
+        name: reservation.name,
+        count: reservation.count,
+        slots: reservation.slots
+      }));
 
-          return (
-            !reservation.friends ||
-            reservation.friends.length === 0
-          );
-        })
-        .sort((a, b) => {
-
-          const A =
-            a.slots[0] || {};
-
-          const B =
-            b.slots[0] || {};
-
-          return (
-            (A.month - B.month) ||
-            (A.day - B.day) ||
-            (A.hour - B.hour) ||
-            (A.minute - B.minute) ||
-            a.name.localeCompare(
-              b.name,
-              'ko'
-            )
-          );
-        })
-        .map(reservation => ({
-
-          id:
-            reservation.id,
-
-          name:
-            reservation.name,
-
-          count:
-            reservation.count,
-
-          slots:
-            reservation.slots
-
-        }));
-
-    const totalPeople =
-      reservations.reduce(
-        (sum, reservation) =>
-          sum + reservation.count,
-        0
-      );
+    const totalPeople = reservations.reduce(
+      (sum, reservation) => sum + reservation.count,
+      0
+    );
 
     res.json({
-
-      total:
-        reservations.length,
-
+      total: reservations.length,
       totalPeople,
-
       reservations,
-
-      latestResponse:
-        data.latestResponse,
-
-      fileMtime:
-        data.fileMtime
+      latestResponse: data.latestResponse,
+      fileMtime: data.fileMtime
     });
-
   } catch (error) {
-
     console.error(error);
 
     res.status(500).json({
@@ -641,206 +428,185 @@ app.get('/api/other', (req, res) => {
   }
 });
 
+// 2회 이상 예매한 예매자
+// 이름이 같은 예매 행이 2개 이상인 사람
+app.get('/api/repeat-bookers', (req, res) => {
+  try {
+    const data = readExcel();
+    const grouped = new Map();
 
-/* --------------------------------------------------
-   바닐라 비교
+    for (const reservation of data.reservations) {
+      const key = reservation.name.replace(/\s+/g, '');
 
-   대상 20명
--------------------------------------------------- */
-
-app.get(
-  '/api/compare-performances',
-  (req, res) => {
-
-    try {
-
-      const data =
-        readExcel();
-
-      const targetNames =
-        new Set([
-
-          '이희성',
-          '이유민',
-          '서태원',
-          '유정수',
-          '권오성',
-          '김현지',
-          '이종현',
-          '정우영',
-          '이예림',
-          '윤강보',
-
-          '김명훈',
-          '정해령',
-          '이슬아',
-          '김여림',
-          '서채림',
-          '김준희',
-          '강태희',
-          '박경희',
-          '김재현',
-          '백경환'
-
-        ]);
-
-      const result = {
-
-        lunch: {
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          name: reservation.name,
           bookings: 0,
-          people: 0,
-          names: []
-        },
-
-        dinner: {
-          bookings: 0,
-          people: 0,
-          names: []
-        },
-
-        both: []
-      };
-
-
-      for (
-        const reservation
-        of data.reservations
-      ) {
-
-        if (
-          !targetNames.has(
-            reservation.name
-          )
-        ) {
-          continue;
-        }
-
-        /*
-          점심
-          11:00 ~ 15:59
-        */
-
-        const lunchSlots =
-          reservation.slots.filter(
-            slot =>
-              slot.hour >= 11 &&
-              slot.hour < 16
-          );
-
-
-        /*
-          저녁
-          17:00 ~ 21:59
-        */
-
-        const dinnerSlots =
-          reservation.slots.filter(
-            slot =>
-              slot.hour >= 17 &&
-              slot.hour < 22
-          );
-
-
-        if (lunchSlots.length > 0) {
-
-          result.lunch.bookings += 1;
-
-          result.lunch.people +=
-            reservation.count;
-
-          result.lunch.names.push({
-
-            name:
-              reservation.name,
-
-            count:
-              reservation.count,
-
-            slots:
-              lunchSlots
-          });
-        }
-
-
-        if (dinnerSlots.length > 0) {
-
-          result.dinner.bookings += 1;
-
-          result.dinner.people +=
-            reservation.count;
-
-          result.dinner.names.push({
-
-            name:
-              reservation.name,
-
-            count:
-              reservation.count,
-
-            slots:
-              dinnerSlots
-          });
-        }
-
-
-        if (
-          lunchSlots.length > 0 &&
-          dinnerSlots.length > 0
-        ) {
-
-          result.both.push(
-            reservation.name
-          );
-        }
+          totalPeople: 0,
+          friends: new Set(),
+          slots: []
+        });
       }
 
+      const item = grouped.get(key);
 
-      res.json(result);
+      item.bookings += 1;
+      item.totalPeople += reservation.count;
 
-    } catch (error) {
-
-      console.error(error);
-
-      res.status(500).json({
-        error: error.message
+      reservation.friends.forEach(friend => {
+        item.friends.add(friend);
       });
+
+      item.slots.push(...reservation.slots);
     }
+
+    const reservations = [...grouped.values()]
+      .filter(item => item.bookings >= 2)
+      .map(item => ({
+        name: item.name,
+        bookings: item.bookings,
+        totalPeople: item.totalPeople,
+        friends: [...item.friends],
+        slots: item.slots
+      }))
+      .sort((a, b) =>
+        (b.bookings - a.bookings) ||
+        a.name.localeCompare(b.name, 'ko')
+      );
+
+    res.json({
+      total: reservations.length,
+      totalBookings: reservations.reduce(
+        (sum, item) => sum + item.bookings,
+        0
+      ),
+      totalPeople: reservations.reduce(
+        (sum, item) => sum + item.totalPeople,
+        0
+      ),
+      reservations,
+      latestResponse: data.latestResponse,
+      fileMtime: data.fileMtime
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: error.message
+    });
   }
-);
+});
 
+// 바닐라 비교
+// 대상 20명
+app.get('/api/compare-performances', (req, res) => {
+  try {
+    const data = readExcel();
 
-/* --------------------------------------------------
-   SPA fallback
--------------------------------------------------- */
+    const targetNames = new Set([
+      '이희성',
+      '이유민',
+      '서태원',
+      '유정수',
+      '권오성',
+      '김현지',
+      '이종현',
+      '정우영',
+      '이예림',
+      '윤강보',
+      '김명훈',
+      '정해령',
+      '이슬아',
+      '김여림',
+      '서채림',
+      '김준희',
+      '강태희',
+      '박경희',
+      '김재현',
+      '백경환'
+    ]);
 
+    const result = {
+      lunch: {
+        bookings: 0,
+        people: 0,
+        names: []
+      },
+      dinner: {
+        bookings: 0,
+        people: 0,
+        names: []
+      },
+      both: []
+    };
+
+    for (const reservation of data.reservations) {
+      if (!targetNames.has(reservation.name)) {
+        continue;
+      }
+
+      // 점심 11:00 ~ 15:59
+      const lunchSlots = reservation.slots.filter(
+        slot => slot.hour >= 11 && slot.hour < 16
+      );
+
+      // 저녁 17:00 ~ 21:59
+      const dinnerSlots = reservation.slots.filter(
+        slot => slot.hour >= 17 && slot.hour < 22
+      );
+
+      if (lunchSlots.length > 0) {
+        result.lunch.bookings += 1;
+        result.lunch.people += reservation.count;
+
+        result.lunch.names.push({
+          name: reservation.name,
+          count: reservation.count,
+          slots: lunchSlots
+        });
+      }
+
+      if (dinnerSlots.length > 0) {
+        result.dinner.bookings += 1;
+        result.dinner.people += reservation.count;
+
+        result.dinner.names.push({
+          name: reservation.name,
+          count: reservation.count,
+          slots: dinnerSlots
+        });
+      }
+
+      if (
+        lunchSlots.length > 0 &&
+        dinnerSlots.length > 0
+      ) {
+        result.both.push(reservation.name);
+      }
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
+// SPA fallback
 app.use((req, res, next) => {
-
   if (req.method !== 'GET') {
     return next();
   }
 
   res.sendFile(
-    path.join(
-      __dirname,
-      'public',
-      'index.html'
-    )
+    path.join(__dirname, 'public', 'index.html')
   );
 });
 
-
-/* --------------------------------------------------
-   서버 실행
--------------------------------------------------- */
-
-app.listen(
-  PORT,
-  '0.0.0.0',
-  () => {
-
-    console.log(
-      `Yujak site listening on ${PORT}`
-    );
-
-  }
-);
+// 서버 실행
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Yujak site listening on ${PORT}`);
+});
