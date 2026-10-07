@@ -1,4 +1,3 @@
-
 const express = require('express');
 const XLSX = require('xlsx');
 const fs = require('fs');
@@ -67,8 +66,27 @@ function responseDate(value) {
   return new Date(timestamp).toISOString();
 }
 
+/* =========================================================
+   회차 파싱
+========================================================= */
+
 function parseSlot(raw) {
   const value = text(raw);
+
+  /*
+   * 실제 엑셀 데이터 형태:
+   *
+   * [발코니석/시야제한석] 10월 9일 (금) 14:00 [서태원 곽태은 정우영 천세훈]
+   *
+   * 또는 일반석:
+   *
+   * 10월 10일 (토) 14:00 [전형진 곽태은 정우영 천세훈]
+   *
+   * 앞쪽에 발코니석 또는 시야제한석이 포함되어 있으면
+   * 해당 회차를 발코니석으로 처리한다.
+   */
+
+  const isBalcony = /발코니석|시야제한석/.test(value);
 
   const match = value.match(
     /(\d{1,2})월\s*(\d{1,2})일\s*(?:\([^)]*\))?\s*(\d{1,2}):(\d{2})/
@@ -88,8 +106,13 @@ function parseSlot(raw) {
     day,
     hour,
     minute,
+
     key: `${month}-${day}-${hour}:${String(minute).padStart(2, '0')}`,
-    label: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+
+    label: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
+
+    // 발코니석 여부
+    isBalcony
   };
 }
 
@@ -139,6 +162,9 @@ function readExcel() {
         ])
       );
 
+      /*
+       * 여러 회차가 들어있는 경우 | 로 분리
+       */
       const slots = dateRaw
         .split('|')
         .map(parseSlot)
@@ -190,11 +216,15 @@ function readExcel() {
       ? responseList[responseList.length - 1].value
       : null;
 
-  // 회차별 집계
+  /* =======================================================
+     회차별 집계
+  ======================================================= */
+
   const episodeMap = new Map();
 
   for (const reservation of reservations) {
     for (const slot of reservation.slots) {
+
       if (!episodeMap.has(slot.key)) {
         episodeMap.set(slot.key, {
           key: slot.key,
@@ -202,16 +232,42 @@ function readExcel() {
           day: slot.day,
           hour: slot.hour,
           minute: slot.minute,
+
           label: `${slot.month}월 ${slot.day}일 ${slot.label}`,
+
+          // 전체 예매 인원
           people: 0,
-          bookings: 0
+
+          // 전체 예매 건수
+          bookings: 0,
+
+          // 발코니석 예매 인원
+          balconyPeople: 0,
+
+          // 발코니석 예매 건수
+          balconyBookings: 0
         });
       }
 
       const episode = episodeMap.get(slot.key);
 
+      /*
+       * 전체 인원
+       */
       episode.people += reservation.count;
+
+      /*
+       * 전체 예매 건수
+       */
       episode.bookings += 1;
+
+      /*
+       * 발코니석 / 시야제한석 별도 집계
+       */
+      if (slot.isBalcony) {
+        episode.balconyPeople += reservation.count;
+        episode.balconyBookings += 1;
+      }
     }
   }
 
@@ -313,6 +369,7 @@ app.get('/api/search', (req, res) => {
     const data = readExcel();
 
     const matches = data.reservations.filter(reservation => {
+
       // 예매자 성함 검색
       if (type === 'booker') {
         return reservation.name
@@ -350,6 +407,7 @@ app.get('/api/search', (req, res) => {
       type,
       totalBookings: matches.length,
       totalPeople,
+
       reservations: matches.map(reservation => ({
         id: reservation.id,
         name: reservation.name,
@@ -364,6 +422,7 @@ app.get('/api/search', (req, res) => {
         // 예매 날짜와 시간
         slots: reservation.slots
       })),
+
       latestResponse: data.latestResponse,
       fileMtime: data.fileMtime
     });
@@ -476,14 +535,17 @@ app.get('/api/repeat-bookers', (req, res) => {
 
     res.json({
       total: reservations.length,
+
       totalBookings: reservations.reduce(
         (sum, item) => sum + item.bookings,
         0
       ),
+
       totalPeople: reservations.reduce(
         (sum, item) => sum + item.totalPeople,
         0
       ),
+
       reservations,
       latestResponse: data.latestResponse,
       fileMtime: data.fileMtime
@@ -532,11 +594,13 @@ app.get('/api/compare-performances', (req, res) => {
         people: 0,
         names: []
       },
+
       dinner: {
         bookings: 0,
         people: 0,
         names: []
       },
+
       both: []
     };
 
